@@ -83,7 +83,17 @@
     cell.preservesSuperviewLayoutMargins = NO;
     [cell setLayoutMargins:UIEdgeInsetsZero];
     
-    cell.tweet = self.tweets[indexPath.row];
+    Tweet *tweet = self.tweets[indexPath.row];
+    if (tweet.rtName == nil) {
+        cell.rtHeightConstraint.constant = 0.f;
+        cell.rtImgHeightConstraint.constant = 0.f;
+    } else {
+        cell.rtHeightConstraint.constant = 14.5f;
+        cell.rtImgHeightConstraint.constant = 16.0f;
+    }
+    
+    cell.tweet = tweet;
+    
     
     return cell;
     

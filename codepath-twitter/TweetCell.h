@@ -12,5 +12,7 @@
 @interface TweetCell : UITableViewCell
 
 @property (nonatomic, strong) Tweet *tweet;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtImgHeightConstraint;
 
 @end
