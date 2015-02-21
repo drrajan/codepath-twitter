@@ -30,13 +30,15 @@
     User *user = [User currentUser];
     if (user != nil ) {
         NSLog(@"Welcome %@", user.name);
-        self.window.rootViewController = [[TweetsViewController alloc] init];
+        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] init]];
     } else {
         NSLog(@"Not logged in");
         self.window.rootViewController = [[LoginViewController alloc] init];
     }
-
     
+    [[UINavigationBar appearance] setBarTintColor:UIColorFromRGB(0x55ACEE)];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+
     [self.window makeKeyAndVisible];
     
     return YES;

@@ -10,8 +10,13 @@
 #import "User.h"
 #import "Tweet.h"
 #import "TwitterClient.h"
+#import "TweetCell.h"
 
-@interface TweetsViewController ()
+@interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (strong, nonatomic) NSArray *tweets;
 
 @end
 
@@ -19,12 +24,23 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    self.title = @"Home";
+
     [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
-        for (Tweet *tweet in tweets) {
-            NSLog(@"text: %@", tweet.text);
-        }
+//        for (Tweet *tweet in tweets) {
+//            NSLog(@"text: %@", tweet.text);
+//        }
+        self.tweets = tweets;
+        [self.tableView reloadData];
     }];
+    
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 140;
+    
+    [self.tableView registerNib:[UINib nibWithNibName:@"TweetCell" bundle:nil] forCellReuseIdentifier:@"TweetCell"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -36,14 +52,27 @@
     [User logout];
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - Table view methods
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    return self.tweets.count;
+    //return 1;
 }
-*/
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    TweetCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
+    [cell setSeparatorInset:UIEdgeInsetsZero];
+    cell.preservesSuperviewLayoutMargins = NO;
+    [cell setLayoutMargins:UIEdgeInsetsZero];
+    
+    cell.tweet = self.tweets[indexPath.row];
+    
+    return cell;
+    
+}
+
 
 @end
