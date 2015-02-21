@@ -54,3 +54,21 @@
 #define COCOAPODS_VERSION_MINOR_BDBOAuth1Manager 5
 #define COCOAPODS_VERSION_PATCH_BDBOAuth1Manager 0
 
+// BDBSpinKitRefreshControl
+#define COCOAPODS_POD_AVAILABLE_BDBSpinKitRefreshControl
+#define COCOAPODS_VERSION_MAJOR_BDBSpinKitRefreshControl 1
+#define COCOAPODS_VERSION_MINOR_BDBSpinKitRefreshControl 0
+#define COCOAPODS_VERSION_PATCH_BDBSpinKitRefreshControl 3
+
+// DateTools
+#define COCOAPODS_POD_AVAILABLE_DateTools
+#define COCOAPODS_VERSION_MAJOR_DateTools 1
+#define COCOAPODS_VERSION_MINOR_DateTools 5
+#define COCOAPODS_VERSION_PATCH_DateTools 0
+
+// SpinKit
+#define COCOAPODS_POD_AVAILABLE_SpinKit
+#define COCOAPODS_VERSION_MAJOR_SpinKit 1
+#define COCOAPODS_VERSION_MINOR_SpinKit 2
+#define COCOAPODS_VERSION_PATCH_SpinKit 0
+

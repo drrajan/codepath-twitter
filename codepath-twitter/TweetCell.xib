@@ -136,8 +136,11 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="createdAtLabel" destination="PAO-pl-KiU" id="Sjx-ut-4SM"/>
+                <outlet property="favoriteCountLabel" destination="qC0-FI-3Xc" id="UEy-dl-Wfh"/>
                 <outlet property="nameLabel" destination="zzB-9r-0Zi" id="tMX-od-oDx"/>
                 <outlet property="profileImageView" destination="seV-gX-3n5" id="b1Y-Xe-pCL"/>
+                <outlet property="retweetCountLabel" destination="vmG-Ab-wVi" id="L2G-36-QjS"/>
+                <outlet property="retweetLabel" destination="CXS-FN-54V" id="IYQ-K0-0d4"/>
                 <outlet property="tweetBodyLabel" destination="8hh-PM-OFF" id="kWi-u3-pEL"/>
                 <outlet property="twitterHandleLabel" destination="1xW-V7-zk9" id="wM2-9O-FU1"/>
             </connections>

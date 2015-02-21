@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 David Rajan. All rights reserved.
 //
 
+#import "BDBSpinKitRefreshControl.h"
 #import "TweetsViewController.h"
 #import "User.h"
 #import "Tweet.h"
@@ -15,6 +16,7 @@
 @interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) BDBSpinKitRefreshControl *refreshControl;
 
 @property (strong, nonatomic) NSArray *tweets;
 
@@ -26,14 +28,13 @@
     [super viewDidLoad];
     
     self.title = @"Home";
-
-    [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
-//        for (Tweet *tweet in tweets) {
-//            NSLog(@"text: %@", tweet.text);
-//        }
-        self.tweets = tweets;
-        [self.tableView reloadData];
-    }];
+    
+    self.refreshControl =
+    [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStylePulse color:UIColorFromRGB(0X66757F)];
+    [self.refreshControl addTarget:self
+                            action:@selector(refresh:)
+                  forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:self.refreshControl];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -41,6 +42,20 @@
     self.tableView.estimatedRowHeight = 140;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TweetCell" bundle:nil] forCellReuseIdentifier:@"TweetCell"];
+    
+    [self refresh:nil];
+}
+
+- (void)refresh:(id)sender {
+    NSLog(@"Refreshing");
+    [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
+        //        for (Tweet *tweet in tweets) {
+        //            NSLog(@"text: %@", tweet.text);
+        //        }
+        self.tweets = tweets;
+        [self.tableView reloadData];
+        [(BDBSpinKitRefreshControl *)sender endRefreshing];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

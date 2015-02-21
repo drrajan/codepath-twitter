@@ -16,6 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *twitterHandleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *createdAtLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tweetBodyLabel;
+@property (weak, nonatomic) IBOutlet UILabel *retweetCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *favoriteCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *retweetLabel;
 
 
 @end
@@ -43,7 +46,24 @@
     self.nameLabel.text = tweet.user.name;
     self.twitterHandleLabel.text = tweet.user.screenname;
     self.tweetBodyLabel.text = tweet.text;
-    //self.createdAtLabel.text = [NSString stringWithFormat:@"@%", tweet.createdAt];
+    self.createdAtLabel.text = tweet.createdAtString;
+    if (tweet.retweetCount > 0) {
+        self.retweetCountLabel.text = [NSString stringWithFormat:@"%ld", tweet.retweetCount];
+    } else {
+        self.retweetCountLabel.text = @"";
+    }
+    if (tweet.favoriteCount > 0) {
+        self.favoriteCountLabel.text = [NSString stringWithFormat:@"%ld", tweet.favoriteCount];
+    } else {
+        self.favoriteCountLabel.text = @"";
+    }
+    
+    
+    if (tweet.rtName != nil) {
+        self.retweetLabel.text = [NSString stringWithFormat:@"%@ retweeted", tweet.rtName];
+    } else {
+        self.retweetLabel.text = @"";
+    }
 }
 
 @end
