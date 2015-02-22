@@ -127,6 +127,19 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
     
 }
 
+- (void)postFavoriteWithID:(NSString *)tweetID withAction:(NSString *)action completion:(void (^)(Tweet *, NSError *))completion {
+    [self POST:[NSString stringWithFormat:@"1.1/favorites/%@.json?id=%@", action, tweetID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        Tweet *tweet = [[Tweet alloc] initWithDictionary:responseObject];
+        NSLog(@"favorite %@: %@!", action, tweetID);
+        completion(tweet, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"failure favorite %@: %@!", action, tweetID);
+        completion(nil, error);
+    }];
+}
+
+#pragma mark private
+
 - (void)getRetweetsWithID:(NSString *)tweetID completion:(void (^)(NSString *, NSError *))completion {
     [self GET:[NSString stringWithFormat:@"1.1/statuses/retweets/%@.json", tweetID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         User *user = [User currentUser];

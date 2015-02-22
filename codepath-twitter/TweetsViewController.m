@@ -36,7 +36,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(onNewButton)];
     
     self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
-    self.favoriteColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
+    self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
     
     self.refreshControl =
     [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStylePulse color:UIColorFromRGB(0X66757F)];
@@ -53,6 +53,11 @@
     [self.tableView registerNib:[UINib nibWithNibName:@"TweetCell" bundle:nil] forCellReuseIdentifier:@"TweetCell"];
     
     [self refresh:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 
 - (void)refresh:(id)sender {
@@ -161,27 +166,58 @@
 
 - (void)onRetweet:(UIButton*)sender {
     Tweet *currTweet = self.tweets[sender.tag];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:sender.tag inSection:0];
+    
     if (currTweet.isRetweet) {
         [[TwitterClient sharedInstance] deleteRetweetWithID:currTweet.retweetID completion:^(Tweet *tweet, NSError *error) {
             if (!error) {
                 NSLog(@"unretweeted: %@", tweet.text);
-                [sender setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+                --currTweet.retweetCount;
                 currTweet.isRetweet = NO;
+                [self updateCellAtIndexPath:indexPath];
             }
         }];
     } else {
         [[TwitterClient sharedInstance] postRetweetWithID:currTweet.retweetID completion:^(Tweet *tweet, NSError *error) {
             if (!error) {
                 NSLog(@"retweeted: %@", tweet.text);
-                [sender setTitleColor:self.retweetColor forState:UIControlStateNormal];
+                currTweet.retweetCount++;
                 currTweet.isRetweet = YES;
+                [self updateCellAtIndexPath:indexPath];
             }
         }];
     }
 }
 
 - (void)onFavorite:(UIButton*)sender {
+    Tweet *currTweet = self.tweets[sender.tag];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:sender.tag inSection:0];
     
+    if (currTweet.isFavorite) {
+        [[TwitterClient sharedInstance] postFavoriteWithID:currTweet.retweetID withAction:@"destroy" completion:^(Tweet *tweet, NSError *error) {
+            if (!error) {
+                NSLog(@"unfavorited: %@", tweet.text);
+                currTweet.isFavorite = NO;
+                --currTweet.favoriteCount;
+                [self updateCellAtIndexPath:indexPath];
+            }
+        }];
+    } else {
+        [[TwitterClient sharedInstance] postFavoriteWithID:currTweet.retweetID withAction:@"create" completion:^(Tweet *tweet, NSError *error) {
+            if (!error) {
+                NSLog(@"favorited: %@", tweet.text);
+                currTweet.isFavorite = YES;
+                currTweet.favoriteCount++;
+                [self updateCellAtIndexPath:indexPath];
+            }
+        }];
+    }
+}
+
+- (void)updateCellAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView beginUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView endUpdates];
 }
 
 

@@ -21,4 +21,5 @@
 - (void)postStatusWithParams:(NSDictionary *)params completion:(void (^)(Tweet *tweet, NSError *))completion;
 - (void)postRetweetWithID:(NSString *)tweetID completion:(void (^)(Tweet *tweet, NSError *))completion;
 - (void)deleteRetweetWithID:(NSString *)tweetID completion:(void (^)(Tweet *tweet, NSError *))completion;
+- (void)postFavoriteWithID:(NSString *)tweetID withAction:(NSString *)action completion:(void (^)(Tweet *, NSError *))completion;
 @end
