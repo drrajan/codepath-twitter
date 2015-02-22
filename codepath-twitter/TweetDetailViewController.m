@@ -21,6 +21,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *favoriteCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *retweetLabel;
 
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtImgHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtFavHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtFavBarHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtFavTxtHeightConstraint;
+
 @end
 
 @implementation TweetDetailViewController
@@ -32,9 +38,24 @@
     self.profileImageView.layer.cornerRadius = 3;
     self.profileImageView.clipsToBounds = YES;
     
+    if (self.tweet.rtName == nil) {
+        self.rtHeightConstraint.constant = 0.f;
+        self.rtImgHeightConstraint.constant = 0.f;
+    } else {
+        self.rtHeightConstraint.constant = 15.0f;
+        self.rtImgHeightConstraint.constant = 16.0f;
+    }
+    if (self.tweet.retweetCount > 0 || self.tweet.favoriteCount > 0) {
+        self.rtFavHeightConstraint.constant = 40.0f;
+        self.rtFavBarHeightConstraint.constant = 1.0f;
+        self.rtFavTxtHeightConstraint.constant = 16.0f;
+    } else {
+        self.rtFavHeightConstraint.constant = 0.f;
+        self.rtFavBarHeightConstraint.constant = 0.f;
+        self.rtFavTxtHeightConstraint.constant = 0.f;
+    }
+    
     [self updateView];
-
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -49,7 +70,7 @@
     self.twitterHandleLabel.text = self.tweet.user.screenname;
     self.tweetBodyLabel.text = self.tweet.text;
 
-    self.createdAtLabel.text = [self.tweet.createdAt formattedDateWithFormat:@"MM/dd/yy, hh:mm a"];
+    self.createdAtLabel.text = [self.tweet.createdAt formattedDateWithFormat:@"M/dd/yy, hh:mm a"];
     
     if (self.tweet.retweetCount > 0) {
         self.retweetCountLabel.text = [NSString stringWithFormat:@"%ld", self.tweet.retweetCount];
