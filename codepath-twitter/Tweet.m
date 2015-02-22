@@ -14,7 +14,14 @@
     self = [super init];
     if (self) {
         
-        self.tweetID = dictionary[@"id_str"];
+        if (dictionary[@"in_reply_to_status_id_str"] != (id)[NSNull null]) {
+            self.tweetID = dictionary[@"in_reply_to_status_id_str"];
+            self.tweetReplyScreenname = dictionary[@"in_reply_to_screen_name"];
+        } else {
+            self.tweetID = dictionary[@"id_str"];
+            self.tweetReplyScreenname = [dictionary valueForKeyPath:@"user.screen_name"];
+        }
+        
         
         if ([[dictionary valueForKeyPath:@"retweeted_status"] count] > 0) {
             self.rtName = [dictionary valueForKeyPath:@"user.name"];

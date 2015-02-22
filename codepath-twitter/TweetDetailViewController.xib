@@ -15,8 +15,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TweetDetailViewController">
             <connections>
                 <outlet property="createdAtLabel" destination="FR1-CG-VnN" id="5ln-b1-pwz"/>
+                <outlet property="favoriteButton" destination="cxY-gp-9gd" id="xmu-sH-mxj"/>
                 <outlet property="nameLabel" destination="VaE-JB-zTi" id="Ifs-zh-WCV"/>
                 <outlet property="profileImageView" destination="6EI-0S-spI" id="QYM-bT-Vjo"/>
+                <outlet property="replyButton" destination="mU8-Rm-fhl" id="sPU-G2-iBG"/>
+                <outlet property="retweetButton" destination="IbY-Eb-CAg" id="R6h-xV-YgV"/>
                 <outlet property="retweetLabel" destination="ZXb-Ui-rKc" id="uKW-Iz-K1T"/>
                 <outlet property="rtFavBarHeightConstraint" destination="btM-Nz-zgi" id="5ks-FC-fm6"/>
                 <outlet property="rtFavHeightConstraint" destination="Z42-BG-sRd" id="37N-Z3-9kD"/>
@@ -100,6 +103,9 @@
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="onReply:" destination="-1" eventType="touchUpInside" id="mzs-hU-xha"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IbY-Eb-CAg">
                             <rect key="frame" x="90" y="11" width="24" height="18"/>
@@ -108,6 +114,9 @@
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="onRetweet:" destination="-1" eventType="touchUpInside" id="SPl-OT-Cou"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxY-gp-9gd">
                             <rect key="frame" x="165" y="11" width="24" height="18"/>
@@ -116,6 +125,9 @@
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="onFavorite:" destination="-1" eventType="touchUpInside" id="3sQ-Lu-WAa"/>
+                            </connections>
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W7d-m6-AjO">
                             <rect key="frame" x="0.0" y="39" width="320" height="1"/>

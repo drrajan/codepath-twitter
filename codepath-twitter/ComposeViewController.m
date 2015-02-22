@@ -60,7 +60,7 @@
 
 - (void)updateTextViewForReply {
     if (self.tweet != nil) {
-        NSString *text = [NSString stringWithFormat:@"%@ ", self.tweet.user.screenname];
+        NSString *text = [NSString stringWithFormat:@"@%@ ", self.tweet.tweetReplyScreenname];
         if (self.tweet.rtScreenName != nil) {
             text = [text stringByAppendingString:[NSString stringWithFormat:@"@%@ ", self.tweet.rtScreenName]];
         }

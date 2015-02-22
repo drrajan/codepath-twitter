@@ -6,11 +6,13 @@
 //  Copyright (c) 2015 David Rajan. All rights reserved.
 //
 
+#import "TwitterClient.h"
 #import "TweetDetailViewController.h"
+#import "ComposeViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+DateTools.h"
 
-@interface TweetDetailViewController ()
+@interface TweetDetailViewController () <ComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -26,6 +28,11 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtFavHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtFavBarHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtFavTxtHeightConstraint;
+
+@property (weak, nonatomic) IBOutlet UIButton *replyButton;
+@property (weak, nonatomic) IBOutlet UIButton *retweetButton;
+@property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
+
 
 @end
 
@@ -90,6 +97,35 @@
         self.retweetLabel.text = @"";
     }
 }
+
+#pragma mark Compose View methods
+
+-(void)postStatusUpdateWithDictionary:(NSDictionary *)dictionary {
+    [[TwitterClient sharedInstance] postStatusWithParams:dictionary completion:^(Tweet *tweet, NSError *error) {
+        NSLog(@"posted tweet: %@", tweet.text);
+    }];
+}
+
+#pragma mark Private methods
+
+- (IBAction)onReply:(id)sender {
+    ComposeViewController *vc = [[ComposeViewController alloc] init];
+    vc.tweet = self.tweet;
+    vc.delegate = self;
+    
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nvc animated:YES completion:nil];
+}
+
+- (IBAction)onRetweet:(id)sender {
+    
+}
+
+- (IBAction)onFavorite:(id)sender {
+    
+}
+
+
 
 
 @end
