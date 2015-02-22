@@ -14,11 +14,16 @@
     self = [super init];
     if (self) {
         
+        self.tweetID = dictionary[@"id_str"];
+        
         if ([[dictionary valueForKeyPath:@"retweeted_status"] count] > 0) {
             self.rtName = [dictionary valueForKeyPath:@"user.name"];
+            self.rtScreenName = [dictionary valueForKeyPath:@"user.screen_name"];
             dictionary = [dictionary valueForKeyPath:@"retweeted_status"];
+            self.rtTweetID = dictionary[@"id_str"];
         } else {
             self.rtName = nil;
+            self.rtScreenName = nil;
         }
         
         self.user = [[User alloc] initWithDictionary:dictionary[@"user"]];

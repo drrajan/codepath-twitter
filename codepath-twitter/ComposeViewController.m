@@ -32,6 +32,8 @@
     self.name.text = user.name;
     self.screenname.text = user.screenname;
     [self.profileImageView setImageWithURL:[NSURL URLWithString:user.profileImageUrl]];
+    
+    [self updateTextViewForReply];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,11 +50,24 @@
     [dictionary setValue:self.textView.text forKey:@"status"];
     
     if (self.tweet != nil) {
-        [dictionary setValue:self.tweet forKey:@"in_reply_to_status_id"];
+        [dictionary setValue:self.tweet.tweetID forKey:@"in_reply_to_status_id"];
+        NSLog(@"reply to: %@", [dictionary valueForKey:@"in_reply_to_status_id"]);
     }
     
     [self.delegate postStatusUpdateWithDictionary:dictionary];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)updateTextViewForReply {
+    if (self.tweet != nil) {
+        NSString *text = [NSString stringWithFormat:@"%@ ", self.tweet.user.screenname];
+        if (self.tweet.rtScreenName != nil) {
+            text = [text stringByAppendingString:[NSString stringWithFormat:@"@%@ ", self.tweet.rtScreenName]];
+        }
+        self.textView.text = text;
+        self.textView.textColor = [UIColor blackColor];
+        [self.textView becomeFirstResponder];
+    }
 }
 
 #pragma mark Text View methods

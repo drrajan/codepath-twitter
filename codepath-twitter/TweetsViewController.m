@@ -68,14 +68,6 @@
     [User logout];
 }
 
-- (void)onNewButton {
-    ComposeViewController *vc = [[ComposeViewController alloc] init];
-    vc.delegate = self;
-    
-    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
-    [self presentViewController:nvc animated:YES completion:nil];
-}
-
 
 #pragma mark - Table view methods
 
@@ -103,6 +95,12 @@
     
     cell.tweet = tweet;
     
+    cell.replyButton.tag = indexPath.row;
+    cell.retweetButton.tag = indexPath.row;
+    cell.favoriteButton.tag = indexPath.row;
+    [cell.replyButton addTarget:self action:@selector(onReply:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.retweetButton addTarget:self action:@selector(onRetweet:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.favoriteButton addTarget:self action:@selector(onFavorite:) forControlEvents:UIControlEventTouchUpInside];
     
     return cell;
     
@@ -124,6 +122,33 @@
     [[TwitterClient sharedInstance] postStatusWithParams:dictionary completion:^(Tweet *tweet, NSError *error) {
         NSLog(@"posted tweet: %@", tweet.text);
     }];
+}
+
+#pragma mark Private methods
+
+- (void)composeTweetWithReply:(Tweet *)reply {
+    ComposeViewController *vc = [[ComposeViewController alloc] init];
+    vc.tweet = reply;
+    vc.delegate = self;
+    
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nvc animated:YES completion:nil];
+}
+
+- (void)onNewButton {
+    [self composeTweetWithReply:nil];
+}
+
+- (void)onReply:(UIButton*)sender {
+    [self composeTweetWithReply:self.tweets[sender.tag]];
+}
+
+- (void)onRetweet:(UIButton*)sender {
+    
+}
+
+- (void)onFavorite:(UIButton*)sender {
+    
 }
 
 

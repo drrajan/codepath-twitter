@@ -21,7 +21,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *favoriteCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *retweetLabel;
 
-
 @end
 
 @implementation TweetCell

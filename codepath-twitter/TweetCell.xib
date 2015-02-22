@@ -3,6 +3,13 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="rosetta-icons-Regular.ttf">
+            <string>icomoon</string>
+            <string>icomoon</string>
+            <string>icomoon</string>
+        </mutableArray>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -59,7 +66,9 @@
                             <constraint firstAttribute="width" constant="16" id="37D-2w-NAU"/>
                             <constraint firstAttribute="height" constant="16" id="bmt-Xf-BRz"/>
                         </constraints>
-                        <state key="normal" backgroundImage="reply">
+                        <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="18"/>
+                        <state key="normal" title="">
+                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -69,7 +78,9 @@
                             <constraint firstAttribute="height" constant="16" id="AFe-Qu-cpD"/>
                             <constraint firstAttribute="width" constant="16" id="ili-nQ-8Ee"/>
                         </constraints>
-                        <state key="normal" backgroundImage="retweet">
+                        <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="17"/>
+                        <state key="normal" title="">
+                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -79,7 +90,9 @@
                             <constraint firstAttribute="height" constant="16" id="0V4-Id-tgV"/>
                             <constraint firstAttribute="width" constant="16" id="BxX-Nw-9lY"/>
                         </constraints>
-                        <state key="normal" backgroundImage="favorite">
+                        <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="18"/>
+                        <state key="normal" title="">
+                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
@@ -137,9 +150,12 @@
             </tableViewCellContentView>
             <connections>
                 <outlet property="createdAtLabel" destination="PAO-pl-KiU" id="Sjx-ut-4SM"/>
+                <outlet property="favoriteButton" destination="w7C-XE-7yO" id="mro-0R-svD"/>
                 <outlet property="favoriteCountLabel" destination="qC0-FI-3Xc" id="UEy-dl-Wfh"/>
                 <outlet property="nameLabel" destination="zzB-9r-0Zi" id="tMX-od-oDx"/>
                 <outlet property="profileImageView" destination="seV-gX-3n5" id="b1Y-Xe-pCL"/>
+                <outlet property="replyButton" destination="obr-m4-ak4" id="ZaA-TX-n4d"/>
+                <outlet property="retweetButton" destination="xl1-2V-pof" id="etz-pw-w5l"/>
                 <outlet property="retweetCountLabel" destination="vmG-Ab-wVi" id="L2G-36-QjS"/>
                 <outlet property="retweetLabel" destination="CXS-FN-54V" id="IYQ-K0-0d4"/>
                 <outlet property="rtHeightConstraint" destination="ecs-k2-d0F" id="Pcs-wg-ilj"/>
@@ -151,8 +167,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="favorite" width="8" height="8"/>
-        <image name="reply" width="8" height="8"/>
         <image name="retweet" width="9" height="8"/>
     </resources>
 </document>
