@@ -19,6 +19,8 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) BDBSpinKitRefreshControl *refreshControl;
+@property (strong, nonatomic) UIColor *retweetColor;
+@property (strong, nonatomic) UIColor *favoriteColor;
 
 @property (strong, nonatomic) NSArray *tweets;
 
@@ -32,6 +34,9 @@
     self.title = @"Home";
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(onNewButton)];
+    
+    self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
+    self.favoriteColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
     
     self.refreshControl =
     [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStylePulse color:UIColorFromRGB(0X66757F)];
@@ -95,6 +100,17 @@
     
     cell.tweet = tweet;
     
+    if (tweet.isRetweet) {
+        [cell.retweetButton setTitleColor:self.retweetColor forState:UIControlStateNormal];
+    } else {
+        [cell.retweetButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    if (tweet.isFavorite) {
+        [cell.favoriteButton setTitleColor:self.favoriteColor forState:UIControlStateNormal];
+    } else {
+        [cell.favoriteButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
     cell.replyButton.tag = indexPath.row;
     cell.retweetButton.tag = indexPath.row;
     cell.favoriteButton.tag = indexPath.row;
@@ -144,7 +160,24 @@
 }
 
 - (void)onRetweet:(UIButton*)sender {
-    
+    Tweet *currTweet = self.tweets[sender.tag];
+    if (currTweet.isRetweet) {
+        [[TwitterClient sharedInstance] deleteRetweetWithID:currTweet.retweetID completion:^(Tweet *tweet, NSError *error) {
+            if (!error) {
+                NSLog(@"unretweeted: %@", tweet.text);
+                [sender setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+                currTweet.isRetweet = NO;
+            }
+        }];
+    } else {
+        [[TwitterClient sharedInstance] postRetweetWithID:currTweet.retweetID completion:^(Tweet *tweet, NSError *error) {
+            if (!error) {
+                NSLog(@"retweeted: %@", tweet.text);
+                [sender setTitleColor:self.retweetColor forState:UIControlStateNormal];
+                currTweet.isRetweet = YES;
+            }
+        }];
+    }
 }
 
 - (void)onFavorite:(UIButton*)sender {

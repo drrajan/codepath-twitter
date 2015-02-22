@@ -33,7 +33,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *retweetButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButton;
 
-
+@property (strong, nonatomic) UIColor *retweetColor;
+@property (strong, nonatomic) UIColor *favoriteColor;
 @end
 
 @implementation TweetDetailViewController
@@ -44,6 +45,16 @@
     
     self.profileImageView.layer.cornerRadius = 3;
     self.profileImageView.clipsToBounds = YES;
+    
+    self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
+    self.favoriteColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
+    
+    if (self.tweet.isRetweet) {
+        [self.retweetButton setTitleColor:self.retweetColor forState:UIControlStateNormal];
+    }
+    if (self.tweet.isFavorite) {
+        [self.favoriteButton setTitleColor:self.favoriteColor forState:UIControlStateNormal];
+    }
     
     if (self.tweet.rtName == nil) {
         self.rtHeightConstraint.constant = 0.f;
@@ -117,12 +128,26 @@
     [self presentViewController:nvc animated:YES completion:nil];
 }
 
-- (IBAction)onRetweet:(id)sender {
-    
+- (IBAction)onRetweet:(UIButton *)sender {
+    if (self.tweet.isRetweet) {
+        [[TwitterClient sharedInstance] deleteRetweetWithID:self.tweet.retweetID completion:^(Tweet *tweet, NSError *error) {
+            if (!error) {
+                NSLog(@"unretweeted: %@", tweet.text);
+                [sender setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+            }
+        }];
+    } else {
+        [[TwitterClient sharedInstance] postRetweetWithID:self.tweet.retweetID completion:^(Tweet *tweet, NSError *error) {
+            if (!error) {
+                NSLog(@"retweeted: %@", tweet.text);
+                [sender setTitleColor:self.retweetColor forState:UIControlStateNormal];
+            }
+        }];
+    }
 }
 
-- (IBAction)onFavorite:(id)sender {
-    
+- (IBAction)onFavorite:(UIButton *)sender {
+    [sender setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
 }
 
 

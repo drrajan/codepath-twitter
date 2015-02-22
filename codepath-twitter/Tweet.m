@@ -22,6 +22,8 @@
             self.tweetReplyScreenname = [dictionary valueForKeyPath:@"user.screen_name"];
         }
         
+        self.isRetweet = [dictionary[@"retweeted"] boolValue];
+        self.isFavorite = [dictionary[@"favorited"] boolValue];
         
         if ([[dictionary valueForKeyPath:@"retweeted_status"] count] > 0) {
             self.rtName = [dictionary valueForKeyPath:@"user.name"];
@@ -33,6 +35,7 @@
             self.rtScreenName = nil;
         }
         
+        self.retweetID = dictionary[@"id_str"];
         self.user = [[User alloc] initWithDictionary:dictionary[@"user"]];
         self.text = dictionary[@"text"];
         self.retweetCount = [dictionary[@"retweet_count"] integerValue];

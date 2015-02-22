@@ -92,4 +92,54 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
     }];
 }
 
+- (void)postRetweetWithID:(NSString *)tweetID completion:(void (^)(Tweet *, NSError *))completion {
+    [self POST:[NSString stringWithFormat:@"1.1/statuses/retweet/%@.json", tweetID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        Tweet *tweet = [[Tweet alloc] initWithDictionary:responseObject];
+        NSLog(@"retweeted: %@!", tweetID);
+        completion(tweet, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"failure retweeting: %@!", tweetID);
+        completion(nil, error);
+    }];
+}
+
+- (void)deleteRetweetWithID:(NSString *)tweetID completion:(void (^)(Tweet *, NSError *))completion {
+    
+    [self getRetweetsWithID:tweetID completion:^(NSString *retweetID, NSError *error) {
+        if (!error) {
+            
+            [self POST:[NSString stringWithFormat:@"1.1/statuses/destroy/%@.json", retweetID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                Tweet *tweet = [[Tweet alloc] initWithDictionary:responseObject];
+                NSLog(@"unretweeted: %@!", tweetID);
+                completion(tweet, nil);
+            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                NSLog(@"failure unretweeting: %@!", tweetID);
+                completion(nil, error);
+            }];
+            
+            
+        } else {
+            NSLog(@"could not get retweet id for %@", tweetID);
+        }
+    }];
+    
+    
+    
+}
+
+- (void)getRetweetsWithID:(NSString *)tweetID completion:(void (^)(NSString *, NSError *))completion {
+    [self GET:[NSString stringWithFormat:@"1.1/statuses/retweets/%@.json", tweetID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        User *user = [User currentUser];
+        for (NSDictionary *dictionary in responseObject) {
+            if ([user.userid isEqualToString:[dictionary valueForKeyPath:@"user.id_str"]]) {
+                completion(dictionary[@"id_str"], nil);
+                break;
+            }
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"failure retweeting: %@!", tweetID);
+        completion(nil, error);
+    }];
+}
+
 @end

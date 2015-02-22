@@ -19,5 +19,6 @@
 
 - (void)homeTimelineWithParams:(NSDictionary *)params completion:(void (^)(NSArray *tweets, NSError *error))completion;
 - (void)postStatusWithParams:(NSDictionary *)params completion:(void (^)(Tweet *tweet, NSError *))completion;
-
+- (void)postRetweetWithID:(NSString *)tweetID completion:(void (^)(Tweet *tweet, NSError *))completion;
+- (void)deleteRetweetWithID:(NSString *)tweetID completion:(void (^)(Tweet *tweet, NSError *))completion;
 @end
