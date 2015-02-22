@@ -12,6 +12,7 @@
 #import "Tweet.h"
 #import "TwitterClient.h"
 #import "TweetCell.h"
+#import "TweetDetailViewController.h"
 
 @interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -97,6 +98,16 @@
     
     return cell;
     
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    TweetDetailViewController *vc = [[TweetDetailViewController alloc] init];
+    
+    vc.tweet = self.tweets[indexPath.row];
+    
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 

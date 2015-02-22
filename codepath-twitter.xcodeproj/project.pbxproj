@@ -21,6 +21,9 @@
 		63CF5A741A955B5E008BB690 /* TweetsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63CF5A721A955B5E008BB690 /* TweetsViewController.xib */; };
 		63CF5A791A96649E008BB690 /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CF5A771A96649E008BB690 /* TweetCell.m */; };
 		63CF5A7A1A96649E008BB690 /* TweetCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63CF5A781A96649E008BB690 /* TweetCell.xib */; };
+		63D863D11A9926AF00EC14EF /* TweetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D863CF1A9926AF00EC14EF /* TweetDetailViewController.m */; };
+		63D863D21A9926AF00EC14EF /* TweetDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63D863D01A9926AF00EC14EF /* TweetDetailViewController.xib */; };
+		63D863D41A99425600EC14EF /* rosetta-icons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63D863D31A99425600EC14EF /* rosetta-icons-Regular.ttf */; };
 		7788516500EC7ECB58E0E6E6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AC845D90529B231FABA8A6 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +64,10 @@
 		63CF5A761A96649E008BB690 /* TweetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetCell.h; sourceTree = "<group>"; };
 		63CF5A771A96649E008BB690 /* TweetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetCell.m; sourceTree = "<group>"; };
 		63CF5A781A96649E008BB690 /* TweetCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetCell.xib; sourceTree = "<group>"; };
+		63D863CE1A9926AF00EC14EF /* TweetDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetDetailViewController.h; sourceTree = "<group>"; };
+		63D863CF1A9926AF00EC14EF /* TweetDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetDetailViewController.m; sourceTree = "<group>"; };
+		63D863D01A9926AF00EC14EF /* TweetDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetDetailViewController.xib; sourceTree = "<group>"; };
+		63D863D31A99425600EC14EF /* rosetta-icons-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "rosetta-icons-Regular.ttf"; path = "codepath-twitter/rosetta-icons-Regular.ttf"; sourceTree = "<group>"; };
 		C8AC845D90529B231FABA8A6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC355672C09A50818762A552 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				63CF5A3A1A93FFD3008BB690 /* codepath-twitter */,
+				63D863D31A99425600EC14EF /* rosetta-icons-Regular.ttf */,
 				63CF5A541A93FFD3008BB690 /* codepath-twitterTests */,
 				63CF5A391A93FFD3008BB690 /* Products */,
 				97C36E35C3C31D4ED7229580 /* Pods */,
@@ -193,6 +201,9 @@
 				63CF5A701A955B5E008BB690 /* TweetsViewController.h */,
 				63CF5A711A955B5E008BB690 /* TweetsViewController.m */,
 				63CF5A721A955B5E008BB690 /* TweetsViewController.xib */,
+				63D863CE1A9926AF00EC14EF /* TweetDetailViewController.h */,
+				63D863CF1A9926AF00EC14EF /* TweetDetailViewController.m */,
+				63D863D01A9926AF00EC14EF /* TweetDetailViewController.xib */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -257,6 +268,7 @@
 				TargetAttributes = {
 					63CF5A371A93FFD3008BB690 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = 227E725ZB7;
 					};
 					63CF5A501A93FFD3008BB690 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -289,6 +301,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63CF5A741A955B5E008BB690 /* TweetsViewController.xib in Resources */,
+				63D863D41A99425600EC14EF /* rosetta-icons-Regular.ttf in Resources */,
+				63D863D21A9926AF00EC14EF /* TweetDetailViewController.xib in Resources */,
 				63CF5A7A1A96649E008BB690 /* TweetCell.xib in Resources */,
 				63CF5A4C1A93FFD3008BB690 /* LaunchScreen.xib in Resources */,
 				63CF5A491A93FFD3008BB690 /* Images.xcassets in Resources */,
@@ -348,6 +362,7 @@
 				63CF5A6F1A9428AA008BB690 /* User.m in Sources */,
 				63CF5A6C1A94289A008BB690 /* Tweet.m in Sources */,
 				63CF5A3E1A93FFD3008BB690 /* main.m in Sources */,
+				63D863D11A9926AF00EC14EF /* TweetDetailViewController.m in Sources */,
 				63CF5A641A94038A008BB690 /* LoginViewController.m in Sources */,
 				63CF5A731A955B5E008BB690 /* TweetsViewController.m in Sources */,
 				63CF5A791A96649E008BB690 /* TweetCell.m in Sources */,
@@ -465,9 +480,12 @@
 			baseConfigurationReference = 05F875A345AA006BC70BFB63 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "codepath-twitter/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -476,9 +494,12 @@
 			baseConfigurationReference = FC355672C09A50818762A552 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "codepath-twitter/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
