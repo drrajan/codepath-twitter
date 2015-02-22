@@ -14,6 +14,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TweetDetailViewController">
             <connections>
+                <outlet property="countLabel" destination="0hI-vX-Wvk" id="bJz-ea-f4v"/>
                 <outlet property="createdAtLabel" destination="FR1-CG-VnN" id="5ln-b1-pwz"/>
                 <outlet property="favoriteButton" destination="cxY-gp-9gd" id="xmu-sH-mxj"/>
                 <outlet property="nameLabel" destination="VaE-JB-zTi" id="Ifs-zh-WCV"/>
@@ -158,13 +159,20 @@
                                 <constraint firstAttribute="height" constant="1" id="btM-Nz-zgi"/>
                             </constraints>
                         </view>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1 RETWEET 5 FAVORITES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hI-vX-Wvk">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hI-vX-Wvk">
                             <rect key="frame" x="8" y="12" width="304" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="16" id="0ym-bE-UdL"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <attributedString key="attributedText">
+                                <fragment content="1 RETWEET 5 FAVORITES">
+                                    <attributes>
+                                        <color key="NSColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <font key="NSFont" size="12" name="HelveticaNeue"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>

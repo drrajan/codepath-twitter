@@ -19,8 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *twitterHandleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *createdAtLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tweetBodyLabel;
-@property (weak, nonatomic) IBOutlet UILabel *retweetCountLabel;
-@property (weak, nonatomic) IBOutlet UILabel *favoriteCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @property (weak, nonatomic) IBOutlet UILabel *retweetLabel;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *rtHeightConstraint;
@@ -89,18 +88,25 @@
     self.tweetBodyLabel.text = self.tweet.text;
 
     self.createdAtLabel.text = [self.tweet.createdAt formattedDateWithFormat:@"M/dd/yy, hh:mm a"];
+
+
+    NSString *retweetText = (self.tweet.retweetCount == 1) ? @"RETWEET" : @"RETWEETS";
+    NSString *favoriteText = (self.tweet.favoriteCount == 1) ? @"FAVORITE" : @"FAVORITES";
+    NSString *countText = [NSString stringWithFormat:@"%ld %@   %ld %@", self.tweet.retweetCount, retweetText, self.tweet.favoriteCount, favoriteText];
+    NSMutableAttributedString * string = [[NSMutableAttributedString alloc]initWithString:countText];
     
-    if (self.tweet.retweetCount > 0) {
-        self.retweetCountLabel.text = [NSString stringWithFormat:@"%ld", self.tweet.retweetCount];
-    } else {
-        self.retweetCountLabel.text = @"";
-    }
-    if (self.tweet.favoriteCount > 0) {
-        self.favoriteCountLabel.text = [NSString stringWithFormat:@"%ld", self.tweet.favoriteCount];
-    } else {
-        self.favoriteCountLabel.text = @"";
-    }
+    NSArray *words=[countText componentsSeparatedByString:@" "];
     
+    for (NSString *word in words) {
+        if (word.intValue > 0) {
+            NSRange range=[countText rangeOfString:word];
+            UIFont *boldFont = [UIFont boldSystemFontOfSize:12];
+            NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        boldFont, NSFontAttributeName,[UIColor blackColor], NSForegroundColorAttributeName, nil];
+            [string addAttributes:attributes range:range];
+        }
+    }
+    self.countLabel.attributedText = string;
     
     if (self.tweet.rtName != nil) {
         self.retweetLabel.text = [NSString stringWithFormat:@"%@ retweeted", self.tweet.rtName];
