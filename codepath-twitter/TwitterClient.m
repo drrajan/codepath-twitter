@@ -7,7 +7,6 @@
 //
 
 #import "TwitterClient.h"
-#import "Tweet.h"
 
 NSString * const kTwitterConsumerKey = @"10CI2CVTMmAmk8n6KeUGAluTA";
 NSString * const kTwitterConsumerSecret = @"6KYrutyc6jOqkOn3usLeDhdQPLYLfcb22Cn7TsJgXt7XFl7blo";
@@ -78,6 +77,17 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
         NSArray *tweets = [Tweet tweetsWithArray:responseObject];
         completion(tweets, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+}
+
+- (void)postStatusWithParams:(NSDictionary *)params completion:(void (^)(Tweet *, NSError *))completion {
+    [self POST:@"1.1/statuses/update.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        Tweet *tweet = [[Tweet alloc] initWithDictionary:responseObject];
+        NSLog(@"success posting tweet!");
+        completion(tweet, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"failure posting tweet!");
         completion(nil, error);
     }];
 }

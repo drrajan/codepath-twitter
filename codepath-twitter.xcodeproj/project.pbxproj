@@ -24,6 +24,8 @@
 		63D863D11A9926AF00EC14EF /* TweetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D863CF1A9926AF00EC14EF /* TweetDetailViewController.m */; };
 		63D863D21A9926AF00EC14EF /* TweetDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63D863D01A9926AF00EC14EF /* TweetDetailViewController.xib */; };
 		63D863D41A99425600EC14EF /* rosetta-icons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 63D863D31A99425600EC14EF /* rosetta-icons-Regular.ttf */; };
+		63D863D81A998F8700EC14EF /* ComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D863D61A998F8700EC14EF /* ComposeViewController.m */; };
+		63D863D91A998F8700EC14EF /* ComposeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 63D863D71A998F8700EC14EF /* ComposeViewController.xib */; };
 		7788516500EC7ECB58E0E6E6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AC845D90529B231FABA8A6 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +70,9 @@
 		63D863CF1A9926AF00EC14EF /* TweetDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetDetailViewController.m; sourceTree = "<group>"; };
 		63D863D01A9926AF00EC14EF /* TweetDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetDetailViewController.xib; sourceTree = "<group>"; };
 		63D863D31A99425600EC14EF /* rosetta-icons-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "rosetta-icons-Regular.ttf"; path = "codepath-twitter/rosetta-icons-Regular.ttf"; sourceTree = "<group>"; };
+		63D863D51A998F8700EC14EF /* ComposeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeViewController.h; sourceTree = "<group>"; };
+		63D863D61A998F8700EC14EF /* ComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeViewController.m; sourceTree = "<group>"; };
+		63D863D71A998F8700EC14EF /* ComposeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposeViewController.xib; sourceTree = "<group>"; };
 		C8AC845D90529B231FABA8A6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC355672C09A50818762A552 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -204,6 +209,9 @@
 				63D863CE1A9926AF00EC14EF /* TweetDetailViewController.h */,
 				63D863CF1A9926AF00EC14EF /* TweetDetailViewController.m */,
 				63D863D01A9926AF00EC14EF /* TweetDetailViewController.xib */,
+				63D863D51A998F8700EC14EF /* ComposeViewController.h */,
+				63D863D61A998F8700EC14EF /* ComposeViewController.m */,
+				63D863D71A998F8700EC14EF /* ComposeViewController.xib */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -307,6 +315,7 @@
 				63CF5A4C1A93FFD3008BB690 /* LaunchScreen.xib in Resources */,
 				63CF5A491A93FFD3008BB690 /* Images.xcassets in Resources */,
 				63CF5A651A94038A008BB690 /* LoginViewController.xib in Resources */,
+				63D863D91A998F8700EC14EF /* ComposeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +369,7 @@
 				63CF5A681A94044E008BB690 /* TwitterClient.m in Sources */,
 				63CF5A411A93FFD3008BB690 /* AppDelegate.m in Sources */,
 				63CF5A6F1A9428AA008BB690 /* User.m in Sources */,
+				63D863D81A998F8700EC14EF /* ComposeViewController.m in Sources */,
 				63CF5A6C1A94289A008BB690 /* Tweet.m in Sources */,
 				63CF5A3E1A93FFD3008BB690 /* main.m in Sources */,
 				63D863D11A9926AF00EC14EF /* TweetDetailViewController.m in Sources */,

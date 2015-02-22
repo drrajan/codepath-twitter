@@ -13,8 +13,9 @@
 #import "TwitterClient.h"
 #import "TweetCell.h"
 #import "TweetDetailViewController.h"
+#import "ComposeViewController.h"
 
-@interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate, ComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) BDBSpinKitRefreshControl *refreshControl;
@@ -29,6 +30,8 @@
     [super viewDidLoad];
     
     self.title = @"Home";
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(onNewButton)];
     
     self.refreshControl =
     [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStylePulse color:UIColorFromRGB(0X66757F)];
@@ -50,9 +53,6 @@
 - (void)refresh:(id)sender {
     NSLog(@"Refreshing");
     [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
-        //        for (Tweet *tweet in tweets) {
-        //            NSLog(@"text: %@", tweet.text);
-        //        }
         self.tweets = tweets;
         [self.tableView reloadData];
         [(BDBSpinKitRefreshControl *)sender endRefreshing];
@@ -66,6 +66,14 @@
 
 - (IBAction)onLogout:(id)sender {
     [User logout];
+}
+
+- (void)onNewButton {
+    ComposeViewController *vc = [[ComposeViewController alloc] init];
+    vc.delegate = self;
+    
+    UINavigationController *nvc = [[UINavigationController alloc] initWithRootViewController:vc];
+    [self presentViewController:nvc animated:YES completion:nil];
 }
 
 
@@ -108,6 +116,14 @@
     vc.tweet = self.tweets[indexPath.row];
     
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark Compose View methods
+
+- (void)postStatusUpdateWithDictionary:(NSDictionary *)dictionary {
+    [[TwitterClient sharedInstance] postStatusWithParams:dictionary completion:^(Tweet *tweet, NSError *error) {
+        NSLog(@"posted tweet: %@", tweet.text);
+    }];
 }
 
 
