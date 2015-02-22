@@ -14,6 +14,12 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TweetDetailViewController">
             <connections>
+                <outlet property="createdAtLabel" destination="FR1-CG-VnN" id="5ln-b1-pwz"/>
+                <outlet property="nameLabel" destination="VaE-JB-zTi" id="Ifs-zh-WCV"/>
+                <outlet property="profileImageView" destination="6EI-0S-spI" id="QYM-bT-Vjo"/>
+                <outlet property="retweetLabel" destination="ZXb-Ui-rKc" id="uKW-Iz-K1T"/>
+                <outlet property="tweetBodyLabel" destination="XqY-CX-FvW" id="3an-cE-dpQ"/>
+                <outlet property="twitterHandleLabel" destination="Yf1-xn-97r" id="Mnu-au-8rH"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -57,19 +63,19 @@
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Did you know you can tell if someone is a programmer simply by saying the word &quot;timezones&quot; and seeing if they cringe?" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="304" translatesAutoresizingMaskIntoConstraints="NO" id="XqY-CX-FvW">
                     <rect key="frame" x="8" y="92" width="304" height="65"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1vr-yq-UcE">
-                    <rect key="frame" x="0.0" y="191" width="320" height="30"/>
+                    <rect key="frame" x="0.0" y="191" width="320" height="40"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dTA-vz-ggc">
                             <rect key="frame" x="8" y="0.0" width="304" height="1"/>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1 RETWEET 5 FAVORITES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0hI-vX-Wvk">
-                            <rect key="frame" x="8" y="6" width="158" height="16"/>
+                            <rect key="frame" x="8" y="16" width="158" height="16"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -78,42 +84,42 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rMO-F5-uq5">
-                    <rect key="frame" x="0.0" y="222" width="320" height="30"/>
+                    <rect key="frame" x="0.0" y="237" width="320" height="40"/>
                     <subviews>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W7d-m6-AjO">
-                            <rect key="frame" x="0.0" y="29" width="320" height="1"/>
-                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UYI-fM-93I">
                             <rect key="frame" x="8" y="0.0" width="304" height="1"/>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mU8-Rm-fhl">
-                            <rect key="frame" x="8" y="7" width="24" height="18"/>
-                            <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="18"/>
+                            <rect key="frame" x="16" y="11" width="24" height="18"/>
+                            <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="24"/>
                             <state key="normal" title="">
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxY-gp-9gd">
-                            <rect key="frame" x="200" y="7" width="24" height="18"/>
-                            <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="18"/>
-                            <state key="normal" title="">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IbY-Eb-CAg">
+                            <rect key="frame" x="90" y="11" width="24" height="18"/>
+                            <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="24"/>
+                            <state key="normal" title="">
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IbY-Eb-CAg">
-                            <rect key="frame" x="102" y="7" width="24" height="18"/>
-                            <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="18"/>
-                            <state key="normal" title="">
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cxY-gp-9gd">
+                            <rect key="frame" x="165" y="11" width="24" height="18"/>
+                            <fontDescription key="fontDescription" name="icomoon" family="icomoon" pointSize="24"/>
+                            <state key="normal" title="">
                                 <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W7d-m6-AjO">
+                    <rect key="frame" x="0.0" y="276" width="320" height="1"/>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>

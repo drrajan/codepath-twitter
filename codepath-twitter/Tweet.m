@@ -7,7 +7,6 @@
 //
 
 #import "Tweet.h"
-#import "NSDate+DateTools.h"
 
 @implementation Tweet
 
@@ -32,7 +31,6 @@
         formatter.dateFormat = @"EEE MMM d HH:mm:ss Z y";
         
         self.createdAt = [formatter dateFromString:createdAtString];
-        self.createdAtString = self.createdAt.shortTimeAgoSinceNow;
     }
     return self;
 }

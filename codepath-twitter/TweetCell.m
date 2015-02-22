@@ -8,6 +8,7 @@
 
 #import "TweetCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "NSDate+DateTools.h"
 
 @interface TweetCell()
 
@@ -46,7 +47,7 @@
     self.nameLabel.text = tweet.user.name;
     self.twitterHandleLabel.text = tweet.user.screenname;
     self.tweetBodyLabel.text = tweet.text;
-    self.createdAtLabel.text = tweet.createdAtString;
+    self.createdAtLabel.text = tweet.createdAt.shortTimeAgoSinceNow;
     if (tweet.retweetCount > 0) {
         self.retweetCountLabel.text = [NSString stringWithFormat:@"%ld", tweet.retweetCount];
     } else {
