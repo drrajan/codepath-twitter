@@ -25,7 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.navigationController.navigationBar.translucent = NO;
     self.textView.delegate = self;
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 14)];
