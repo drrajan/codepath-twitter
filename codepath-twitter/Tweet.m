@@ -27,8 +27,8 @@
         
         if ([[dictionary valueForKeyPath:@"retweeted_status"] count] > 0) {
             self.rtName = [dictionary valueForKeyPath:@"user.name"];
-            self.rtScreenName = [dictionary valueForKeyPath:@"user.screen_name"];
             dictionary = [dictionary valueForKeyPath:@"retweeted_status"];
+            self.rtScreenName = [dictionary valueForKeyPath:@"user.screen_name"];
             self.rtTweetID = dictionary[@"id_str"];
         } else {
             self.rtName = nil;

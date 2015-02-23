@@ -42,6 +42,17 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.translucent = NO;
     
+    UIButton *newButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 75, 24)];
+    [newButton addTarget:self action:@selector(onReply:) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *buttonLabel = [[UILabel alloc] initWithFrame:
+                            CGRectMake(0,0,75,24)];
+    buttonLabel.text = @"Reply ";
+    buttonLabel.font = [UIFont fontWithName:@"icomoon" size:18.0f];
+    buttonLabel.textColor = [UIColor whiteColor];
+    [newButton addSubview:buttonLabel];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:newButton];
+    self.navigationItem.rightBarButtonItem = item;
+    
     self.profileImageView.layer.cornerRadius = 3;
     self.profileImageView.clipsToBounds = YES;
     
@@ -136,7 +147,7 @@
 
 #pragma mark Private methods
 
-- (IBAction)onReply:(id)sender {
+- (IBAction)onReply:(UIButton *)sender {
     ComposeViewController *vc = [[ComposeViewController alloc] init];
     vc.tweet = self.tweet;
     vc.delegate = self;
