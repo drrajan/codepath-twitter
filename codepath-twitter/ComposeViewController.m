@@ -32,7 +32,7 @@
     self.tweetButton = [[UIButton alloc] initWithFrame:CGRectMake(100, 0, 80, 14)];
     [self.tweetButton addTarget:self action:@selector(onTweetButton) forControlEvents:UIControlEventTouchUpInside];
     self.countLabel = [[UILabel alloc] initWithFrame:
-                      CGRectMake(0,0,50,14)];
+                      CGRectMake(0,0,70,14)];
     self.countLabel.text = @"140";
     UILabel *buttonLabel = [[UILabel alloc] initWithFrame:
                       CGRectMake(0,0,80,14)];

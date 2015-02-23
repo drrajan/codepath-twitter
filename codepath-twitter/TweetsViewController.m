@@ -50,7 +50,7 @@
     self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
     
     self.refreshControl =
-    [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStyleCircle color:self.favoriteColor];
+    [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStyleBounce color:self.favoriteColor];
     [self.refreshControl addTarget:self
                             action:@selector(refresh:withParams:)
                   forControlEvents:UIControlEventValueChanged];

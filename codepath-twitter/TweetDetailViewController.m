@@ -59,30 +59,6 @@
     self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
     self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
     
-    if (self.tweet.isRetweet) {
-        [self.retweetButton setTitleColor:self.retweetColor forState:UIControlStateNormal];
-    }
-    if (self.tweet.isFavorite) {
-        [self.favoriteButton setTitleColor:self.favoriteColor forState:UIControlStateNormal];
-    }
-    
-    if (self.tweet.rtName == nil) {
-        self.rtHeightConstraint.constant = 0.f;
-        self.rtImgHeightConstraint.constant = 0.f;
-    } else {
-        self.rtHeightConstraint.constant = 15.0f;
-        self.rtImgHeightConstraint.constant = 16.0f;
-    }
-    if (self.tweet.retweetCount > 0 || self.tweet.favoriteCount > 0) {
-        self.rtFavHeightConstraint.constant = 40.0f;
-        self.rtFavBarHeightConstraint.constant = 1.0f;
-        self.rtFavTxtHeightConstraint.constant = 16.0f;
-    } else {
-        self.rtFavHeightConstraint.constant = 0.f;
-        self.rtFavBarHeightConstraint.constant = 0.f;
-        self.rtFavTxtHeightConstraint.constant = 0.f;
-    }
-    
     [self updateView];
 }
 
@@ -101,10 +77,26 @@
     self.createdAtLabel.text = [self.tweet.createdAt formattedDateWithFormat:@"M/dd/yy, hh:mm a"];
 
 
-    NSString *retweetText = (self.tweet.retweetCount == 1) ? @"RETWEET" : @"RETWEETS";
-    NSString *favoriteText = (self.tweet.favoriteCount == 1) ? @"FAVORITE" : @"FAVORITES";
-    NSString *countText = [NSString stringWithFormat:@"%ld %@   %ld %@", self.tweet.retweetCount, retweetText, self.tweet.favoriteCount, favoriteText];
-    NSMutableAttributedString * string = [[NSMutableAttributedString alloc]initWithString:countText];
+    NSString *retweetText = @"RETWEETS";
+    if (self.tweet.retweetCount == 1) {
+        retweetText = @"RETWEET";
+    } else if (self.tweet.retweetCount == 0) {
+        retweetText = @"";
+    }
+    NSString *favoriteText = @"FAVORITES";
+    if (self.tweet.favoriteCount == 1) {
+        favoriteText = @"FAVORITE";
+    } else if (self.tweet.favoriteCount == 0) {
+        favoriteText = @"";
+    }
+    NSString *countText = @"";
+    if (self.tweet.retweetCount > 0) {
+        countText = [countText stringByAppendingString:[NSString stringWithFormat:@"%ld %@   ", self.tweet.retweetCount, retweetText]];
+    }
+    if (self.tweet.favoriteCount > 0) {
+        countText = [countText stringByAppendingString:[NSString stringWithFormat:@"%ld %@", self.tweet.favoriteCount, favoriteText]];
+    }
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc]initWithString:countText];
     
     NSArray *words=[countText componentsSeparatedByString:@" "];
     
@@ -134,6 +126,30 @@
         self.retweetLabel.text = [NSString stringWithFormat:@"%@ retweeted", self.tweet.rtName];
     } else {
         self.retweetLabel.text = @"";
+    }
+    
+    if (self.tweet.isRetweet) {
+        [self.retweetButton setTitleColor:self.retweetColor forState:UIControlStateNormal];
+    }
+    if (self.tweet.isFavorite) {
+        [self.favoriteButton setTitleColor:self.favoriteColor forState:UIControlStateNormal];
+    }
+    
+    if (self.tweet.rtName == nil) {
+        self.rtHeightConstraint.constant = 0.f;
+        self.rtImgHeightConstraint.constant = 0.f;
+    } else {
+        self.rtHeightConstraint.constant = 15.0f;
+        self.rtImgHeightConstraint.constant = 16.0f;
+    }
+    if (self.tweet.retweetCount > 0 || self.tweet.favoriteCount > 0) {
+        self.rtFavHeightConstraint.constant = 40.0f;
+        self.rtFavBarHeightConstraint.constant = 1.0f;
+        self.rtFavTxtHeightConstraint.constant = 16.0f;
+    } else {
+        self.rtFavHeightConstraint.constant = 0.f;
+        self.rtFavBarHeightConstraint.constant = 0.f;
+        self.rtFavTxtHeightConstraint.constant = 0.f;
     }
 }
 
