@@ -35,7 +35,7 @@ Time spent: 19 hours
 
 ### Walkthrough
 
-![Video Walkthrough](https://github.com/drrajan/codepath-twitter/raw/master/walkthrough4.gif)
+![Video Walkthrough](https://github.com/drrajan/codepath-twitter/raw/master/walkthrough.gif)
 
 
 
