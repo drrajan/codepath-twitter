@@ -34,7 +34,17 @@
     self.title = @"Home";
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(onLogoutButton)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(onNewButton)];
+    
+    UIButton *newButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
+    [newButton addTarget:self action:@selector(onNewButton) forControlEvents:UIControlEventTouchUpInside];
+    UILabel *buttonLabel = [[UILabel alloc] initWithFrame:
+                            CGRectMake(0,0,24,24)];
+    buttonLabel.text = @"";
+    buttonLabel.font = [UIFont fontWithName:@"icomoon" size:24.0f];
+    buttonLabel.textColor = [UIColor whiteColor];
+    [newButton addSubview:buttonLabel];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:newButton];
+    self.navigationItem.rightBarButtonItem = item;
     
     self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
     self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];

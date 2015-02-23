@@ -45,9 +45,6 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"X" style:UIBarButtonItemStylePlain target:self action:@selector(onCancelButton)];
     self.navigationItem.rightBarButtonItem = item;
-
-    
-  
     
     User *user = [User currentUser];
     self.name.text = user.name;
