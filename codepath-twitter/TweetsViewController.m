@@ -142,6 +142,12 @@
 - (void)postStatusUpdateWithDictionary:(NSDictionary *)dictionary {
     [[TwitterClient sharedInstance] postStatusWithParams:dictionary completion:^(Tweet *tweet, NSError *error) {
         NSLog(@"posted tweet: %@", tweet.text);
+        NSMutableArray *tmpArray = [NSMutableArray arrayWithObject:tweet];
+        [tmpArray addObjectsFromArray:self.tweets];
+        self.tweets = tmpArray;
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
     }];
 }
 
@@ -215,9 +221,7 @@
 }
 
 - (void)updateCellAtIndexPath:(NSIndexPath *)indexPath {
-    [self.tableView beginUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView endUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 
