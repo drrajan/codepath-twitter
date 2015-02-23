@@ -108,6 +108,17 @@
     }
     self.countLabel.attributedText = string;
     
+    if (self.tweet.isRetweet) {
+        [self.retweetButton setTitleColor:self.retweetColor forState:UIControlStateNormal];
+    } else {
+        [self.retweetButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    if (self.tweet.isFavorite) {
+        [self.favoriteButton setTitleColor:self.favoriteColor forState:UIControlStateNormal];
+    } else {
+        [self.favoriteButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    }
+    
     if (self.tweet.rtName != nil) {
         self.retweetLabel.text = [NSString stringWithFormat:@"%@ retweeted", self.tweet.rtName];
     } else {
@@ -141,7 +152,7 @@
                 NSLog(@"unretweeted: %@", tweet.text);
                 self.tweet.isRetweet = NO;
                 --self.tweet.retweetCount;
-                [sender setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+                [self updateView];
             }
         }];
     } else {
@@ -149,8 +160,8 @@
             if (!error) {
                 NSLog(@"retweeted: %@", tweet.text);
                 self.tweet.isRetweet = YES;
-                self.tweet.favoriteCount++;
-                [sender setTitleColor:self.retweetColor forState:UIControlStateNormal];
+                self.tweet.retweetCount++;
+                [self updateView];
             }
         }];
     }
@@ -163,7 +174,7 @@
                 NSLog(@"unfavorited: %@", tweet.text);
                 self.tweet.isFavorite = NO;
                 --self.tweet.favoriteCount;
-                [sender setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+                [self updateView];
             }
         }];
     } else {
@@ -172,7 +183,7 @@
                 NSLog(@"favorited: %@", tweet.text);
                 self.tweet.isFavorite = YES;
                 self.tweet.favoriteCount++;
-                [sender setTitleColor:self.favoriteColor forState:UIControlStateNormal];
+                [self updateView];
             }
         }];
     }

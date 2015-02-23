@@ -16,6 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *screenname;
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 
+@property (strong, nonatomic) UILabel *countLabel;
+@property (strong, nonatomic) UIButton *tweetButton;
+
 @end
 
 @implementation ComposeViewController
@@ -25,8 +28,26 @@
     
     self.textView.delegate = self;
     
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 150, 14)];
+    self.tweetButton = [[UIButton alloc] initWithFrame:CGRectMake(100, 0, 80, 14)];
+    [self.tweetButton addTarget:self action:@selector(onTweetButton) forControlEvents:UIControlEventTouchUpInside];
+    self.countLabel = [[UILabel alloc] initWithFrame:
+                      CGRectMake(0,0,50,14)];
+    self.countLabel.text = @"140";
+    UILabel *buttonLabel = [[UILabel alloc] initWithFrame:
+                      CGRectMake(0,0,80,14)];
+    buttonLabel.text = @"Tweet";
+    buttonLabel.textColor = [UIColor whiteColor];
+    [self.tweetButton addSubview:buttonLabel];
+    [view addSubview:self.tweetButton];
+    [view addSubview:self.countLabel];
+    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:view];
+    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"X" style:UIBarButtonItemStylePlain target:self action:@selector(onCancelButton)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Tweet" style:UIBarButtonItemStylePlain target:self action:@selector(onTweetButton)];
+    self.navigationItem.rightBarButtonItem = item;
+
+    
+  
     
     User *user = [User currentUser];
     self.name.text = user.name;
@@ -66,8 +87,23 @@
         }
         self.textView.text = text;
         self.textView.textColor = [UIColor blackColor];
+        [self updateTextCount];
         [self.textView becomeFirstResponder];
     }
+}
+
+- (void)updateTextCount {
+    NSInteger len = 140-self.textView.text.length;
+    self.countLabel.text=[NSString stringWithFormat:@"%ld", len];
+    
+    if (len < 0) {
+        self.tweetButton.enabled = NO;
+        self.countLabel.textColor = [UIColor redColor];
+    } else {
+        self.tweetButton.enabled = YES;
+        self.countLabel.textColor = [UIColor blackColor];
+    }
+    
 }
 
 #pragma mark Text View methods
@@ -82,6 +118,11 @@ static NSString * const placeholder = @"What's happening?";
     }
     [textView becomeFirstResponder];
 }
+
+- (void)textViewDidChange:(UITextView *)textView {
+    [self updateTextCount];
+}
+
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
