@@ -33,15 +33,16 @@
     
     self.title = @"Home";
     
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(onLogoutButton)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New" style:UIBarButtonItemStylePlain target:self action:@selector(onNewButton)];
     
     self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
     self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
     
     self.refreshControl =
-    [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStylePulse color:UIColorFromRGB(0X66757F)];
+    [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStyleCircle color:self.favoriteColor];
     [self.refreshControl addTarget:self
-                            action:@selector(refresh:)
+                            action:@selector(refresh:withParams:)
                   forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:self.refreshControl];
     
@@ -52,7 +53,7 @@
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TweetCell" bundle:nil] forCellReuseIdentifier:@"TweetCell"];
     
-    [self refresh:nil];
+    [self refresh:nil withParams:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -60,9 +61,9 @@
     [self.tableView reloadData];
 }
 
-- (void)refresh:(id)sender {
+- (void)refresh:(id)sender withParams:(NSDictionary *)params {
     NSLog(@"Refreshing");
-    [[TwitterClient sharedInstance] homeTimelineWithParams:nil completion:^(NSArray *tweets, NSError *error) {
+    [[TwitterClient sharedInstance] homeTimelineWithParams:params completion:^(NSArray *tweets, NSError *error) {
         self.tweets = tweets;
         [self.tableView reloadData];
         [(BDBSpinKitRefreshControl *)sender endRefreshing];
@@ -74,17 +75,11 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)onLogout:(id)sender {
-    [User logout];
-}
-
-
 #pragma mark - Table view methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     return self.tweets.count;
-    //return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -122,6 +117,12 @@
     [cell.replyButton addTarget:self action:@selector(onReply:) forControlEvents:UIControlEventTouchUpInside];
     [cell.retweetButton addTarget:self action:@selector(onRetweet:) forControlEvents:UIControlEventTouchUpInside];
     [cell.favoriteButton addTarget:self action:@selector(onFavorite:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (indexPath.row == self.tweets.count -1) {
+        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+        [dictionary setValue:tweet.retweetID forKey:@"max_id"];
+        [self refresh:nil withParams:dictionary];
+    }
     
     return cell;
     
@@ -164,6 +165,10 @@
 
 - (void)onNewButton {
     [self composeTweetWithReply:nil];
+}
+
+- (void)onLogoutButton {
+    [User logout];
 }
 
 - (void)onReply:(UIButton*)sender {
