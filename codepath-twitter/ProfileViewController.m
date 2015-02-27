@@ -1,40 +1,50 @@
 //
-//  TweetsViewController.m
+//  ProfileViewController.m
 //  codepath-twitter
 //
-//  Created by David Rajan on 2/18/15.
+//  Created by David Rajan on 2/25/15.
 //  Copyright (c) 2015 David Rajan. All rights reserved.
 //
 
-#import "BDBSpinKitRefreshControl.h"
-#import "TweetsViewController.h"
-#import "User.h"
-#import "Tweet.h"
+#import "ProfileViewController.h"
+#import "ComposeViewController.h"
 #import "TwitterClient.h"
 #import "TweetCell.h"
-#import "TweetDetailViewController.h"
-#import "ComposeViewController.h"
-#import "ProfileViewController.h"
 
-@interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate, ComposeViewControllerDelegate>
+@interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) BDBSpinKitRefreshControl *refreshControl;
+@property (strong, nonatomic) NSArray *tweets;
 @property (strong, nonatomic) UIColor *retweetColor;
 @property (strong, nonatomic) UIColor *favoriteColor;
-
-@property (strong, nonatomic) NSArray *tweets;
+@property (strong, nonatomic) User *user;
 
 @end
 
-@implementation TweetsViewController
+@implementation ProfileViewController
+
+- (id)initWithUser:(User *)user {
+    self = [super init];
+    if (self) {
+        if (user == nil) {
+            self.user = [User currentUser];
+        } else {
+            self.user = user;
+        }
+    }
+    return self;
+}
+
+- (id)init {
+    return [self initWithUser:nil];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationController.navigationBar.translucent = NO;
-    self.title = @"Home";
+    self.title = @"Profile";
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(onLogoutButton)];
+    self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
+    self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
     
     UIButton *newButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
     [newButton addTarget:self action:@selector(onNewButton) forControlEvents:UIControlEventTouchUpInside];
@@ -46,39 +56,17 @@
     [newButton addSubview:buttonLabel];
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:newButton];
     self.navigationItem.rightBarButtonItem = item;
+
     
-    self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
-    self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
-    
-    self.refreshControl =
-    [BDBSpinKitRefreshControl refreshControlWithStyle:RTSpinKitViewStyleBounce color:self.favoriteColor];
-    [self.refreshControl addTarget:self
-                            action:@selector(refresh:withParams:)
-                  forControlEvents:UIControlEventValueChanged];
-    [self.tableView addSubview:self.refreshControl];
-    
-    self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 140;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TweetCell" bundle:nil] forCellReuseIdentifier:@"TweetCell"];
     
     [self refresh:nil withParams:nil];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [self.tableView reloadData];
-}
-
-- (void)refresh:(id)sender withParams:(NSDictionary *)params {
-    NSLog(@"Refreshing");
-    [[TwitterClient sharedInstance] homeTimelineWithParams:params completion:^(NSArray *tweets, NSError *error) {
-        self.tweets = tweets;
-        [self.tableView reloadData];
-        [(BDBSpinKitRefreshControl *)sender endRefreshing];
-    }];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,14 +74,31 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view methods
+- (void)refresh:(id)sender withParams:(NSDictionary *)params {
+    NSLog(@"Refreshing");
+    NSMutableDictionary *dictionary;
+    if (params) {
+        dictionary = [params mutableCopy];
+    } else {
+        dictionary = [NSMutableDictionary dictionary];
+    }
+    [dictionary setValue:self.user.screenname forKey:@"screen_name"];
+    
+    [[TwitterClient sharedInstance] profileWithParams:dictionary completion:^(NSArray *tweets, NSError *error) {
+        self.tweets = tweets;
+        [self.tableView reloadData];
+    }];
+}
+
+#pragma mark Table view methods
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
     return self.tweets.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    
     
     TweetCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"TweetCell"];
     [cell setSeparatorInset:UIEdgeInsetsZero];
@@ -122,6 +127,12 @@
         [cell.favoriteButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
     }
     
+    
+    UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapProfile:)];
+    cell.profileImageView.tag = indexPath.row;
+    cell.profileImageView.userInteractionEnabled = YES;
+    [cell.profileImageView addGestureRecognizer:tgr];
+    
     cell.replyButton.tag = indexPath.row;
     cell.retweetButton.tag = indexPath.row;
     cell.favoriteButton.tag = indexPath.row;
@@ -129,29 +140,13 @@
     [cell.retweetButton addTarget:self action:@selector(onRetweet:) forControlEvents:UIControlEventTouchUpInside];
     [cell.favoriteButton addTarget:self action:@selector(onFavorite:) forControlEvents:UIControlEventTouchUpInside];
     
-    UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapProfile:)];
-    cell.profileImageView.tag = indexPath.row;
-    cell.profileImageView.userInteractionEnabled = YES;
-    [cell.profileImageView addGestureRecognizer:tgr];
-    
-    if (indexPath.row == self.tweets.count -1) {
-        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-        [dictionary setValue:tweet.retweetID forKey:@"max_id"];
-        [self refresh:nil withParams:dictionary];
-    }
+//    if (indexPath.row == self.tweets.count -1) {
+//        NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+//        [dictionary setValue:tweet.retweetID forKey:@"max_id"];
+//        [self refresh:nil withParams:dictionary];
+//    }
     
     return cell;
-    
-}
-
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    TweetDetailViewController *vc = [[TweetDetailViewController alloc] init];
-    
-    vc.tweet = self.tweets[indexPath.row];
-    
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark Compose View methods
@@ -170,6 +165,13 @@
 
 #pragma mark Private methods
 
+- (void)onTapProfile:(UITapGestureRecognizer *)gesture {
+    Tweet *tweet = self.tweets[[gesture view].tag];
+    User *user = tweet.user;
+    ProfileViewController *pvc = [[ProfileViewController alloc] initWithUser:user];
+    [self.navigationController pushViewController:pvc animated:YES];
+}
+
 - (void)composeTweetWithReply:(Tweet *)reply {
     ComposeViewController *vc = [[ComposeViewController alloc] init];
     vc.tweet = reply;
@@ -179,19 +181,8 @@
     [self presentViewController:nvc animated:YES completion:nil];
 }
 
-- (void)onTapProfile:(UITapGestureRecognizer *)gesture {
-    Tweet *tweet = self.tweets[[gesture view].tag];
-    User *user = tweet.user;
-    ProfileViewController *pvc = [[ProfileViewController alloc] initWithUser:user];
-    [self.navigationController pushViewController:pvc animated:YES];
-}
-
 - (void)onNewButton {
     [self composeTweetWithReply:nil];
-}
-
-- (void)onLogoutButton {
-    [User logout];
 }
 
 - (void)onReply:(UIButton*)sender {
@@ -251,6 +242,5 @@
 - (void)updateCellAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
-
 
 @end

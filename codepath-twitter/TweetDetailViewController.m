@@ -11,6 +11,7 @@
 #import "ComposeViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+DateTools.h"
+#import "ProfileViewController.h"
 
 @interface TweetDetailViewController () <ComposeViewControllerDelegate>
 
@@ -53,11 +54,16 @@
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:newButton];
     self.navigationItem.rightBarButtonItem = item;
     
+    UITapGestureRecognizer *tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapProfile:)];
+    [self.profileImageView addGestureRecognizer:tgr];
+    self.profileImageView.userInteractionEnabled = YES;
     self.profileImageView.layer.cornerRadius = 3;
     self.profileImageView.clipsToBounds = YES;
     
     self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
     self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
+    
+   
     
     [self updateView];
 }
@@ -163,6 +169,11 @@
 
 #pragma mark Private methods
 
+- (void)onTapProfile:(UITapGestureRecognizer *)gesture {
+    ProfileViewController *pvc = [[ProfileViewController alloc] initWithUser:self.tweet.user];
+    [self.navigationController pushViewController:pvc animated:YES];
+}
+
 - (IBAction)onReply:(UIButton *)sender {
     ComposeViewController *vc = [[ComposeViewController alloc] init];
     vc.tweet = self.tweet;
@@ -179,7 +190,6 @@
                 NSLog(@"unretweeted: %@", tweet.text);
                 self.tweet.isRetweet = NO;
                 --self.tweet.retweetCount;
-                [self updateView];
             }
         }];
     } else {
@@ -188,10 +198,10 @@
                 NSLog(@"retweeted: %@", tweet.text);
                 self.tweet.isRetweet = YES;
                 self.tweet.retweetCount++;
-                [self updateView];
             }
         }];
     }
+    [self updateView];
 }
 
 - (IBAction)onFavorite:(UIButton *)sender {
@@ -201,7 +211,6 @@
                 NSLog(@"unfavorited: %@", tweet.text);
                 self.tweet.isFavorite = NO;
                 --self.tweet.favoriteCount;
-                [self updateView];
             }
         }];
     } else {
@@ -210,10 +219,10 @@
                 NSLog(@"favorited: %@", tweet.text);
                 self.tweet.isFavorite = YES;
                 self.tweet.favoriteCount++;
-                [self updateView];
             }
         }];
     }
+    [self updateView];
 }
 
 

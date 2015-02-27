@@ -12,6 +12,8 @@
 #import "User.h"
 #import "Tweet.h"
 #import "TweetsViewController.h"
+#import "MasterViewController.h"
+#import "MenuViewController.h"
 
 @interface AppDelegate ()
 
@@ -30,7 +32,12 @@
     User *user = [User currentUser];
     if (user != nil ) {
         NSLog(@"Welcome %@", user.name);
-        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] init]];
+        MenuViewController *menuViewController = [[MenuViewController alloc] init];
+        TweetsViewController *tweetsViewController = [[TweetsViewController alloc] init];
+        MasterViewController *masterViewController = [[MasterViewController alloc] initWithMainViewController:[[UINavigationController alloc] initWithRootViewController:tweetsViewController] menuViewController:menuViewController];
+        self.window.rootViewController = masterViewController;
+//        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] init]];
+        
     } else {
         NSLog(@"Not logged in");
         self.window.rootViewController = [[LoginViewController alloc] init];
