@@ -7,6 +7,7 @@
 //
 
 #import "ProfileViewController.h"
+#import "ProfileHeaderCell.h"
 #import "ComposeViewController.h"
 #import "TwitterClient.h"
 #import "TweetCell.h"
@@ -64,6 +65,7 @@
     self.tableView.estimatedRowHeight = 140;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TweetCell" bundle:nil] forCellReuseIdentifier:@"TweetCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"ProfileHeaderCell" bundle:nil] forCellReuseIdentifier:@"ProfileHeaderCell"];
     
     [self refresh:nil withParams:nil];
     
@@ -147,6 +149,17 @@
 //    }
     
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 250;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    ProfileHeaderCell *headerView = [tableView dequeueReusableCellWithIdentifier:@"ProfileHeaderCell"];
+    headerView.user = self.user;
+    
+    return headerView;
 }
 
 #pragma mark Compose View methods
