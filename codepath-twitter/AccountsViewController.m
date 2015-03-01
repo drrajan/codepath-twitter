@@ -18,6 +18,9 @@
 
 @implementation AccountsViewController
 
+static CGFloat origConstant;
+static AccountCell *swipedCell;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -26,6 +29,9 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 150;
     [self.tableView registerNib:[UINib nibWithNibName:@"AccountCell" bundle:nil] forCellReuseIdentifier:@"AccountCell"];
+    
+    UIPanGestureRecognizer *pgr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(onPan:)];
+    [self.tableView addGestureRecognizer:pgr];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -73,11 +79,37 @@
         cell.preservesSuperviewLayoutMargins = NO;
         [cell setLayoutMargins:UIEdgeInsetsZero];
         cell.user = [User accounts][indexPath.row];
+        
+        cell.removeButton.tag = indexPath.row;
+        [cell.removeButton addTarget:self action:@selector(onRemove:) forControlEvents:UIControlEventTouchUpInside];
+
         return cell;
     }
 }
 
 #pragma mark Private methods
+
+- (void)onPan:(UIPanGestureRecognizer *)pgr {
+    CGPoint translation = [pgr translationInView:pgr.view];
+    if (pgr.state == UIGestureRecognizerStateBegan) {
+        CGPoint swipeLocation = [pgr locationInView:self.tableView];
+        NSIndexPath *swipedIndexPath = [self.tableView indexPathForRowAtPoint:swipeLocation];
+        swipedCell = (AccountCell *)[self.tableView cellForRowAtIndexPath:swipedIndexPath];
+        origConstant = swipedCell.viewConstraint.constant;
+    } else if (pgr.state == UIGestureRecognizerStateChanged) {
+        CGFloat change = origConstant - translation.x;
+        if (origConstant - translation.x)
+        swipedCell.viewConstraint.constant = origConstant - translation.x;
+    }
+}
+
+- (void)onRemove:(UIButton*)sender {
+    [User removeAccount:[User accounts][sender.tag]];
+    if ([User accounts].count == 0) {
+        [User logout];
+    }
+    [self.tableView reloadData];
+}
 
 - (void)addAccount {
     [User switchUser:nil];

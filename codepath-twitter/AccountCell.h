@@ -12,5 +12,8 @@
 @interface AccountCell : UITableViewCell
 
 @property (nonatomic, strong) User *user;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *viewConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *removeButton;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 
 @end

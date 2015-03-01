@@ -46,12 +46,17 @@ NSString * const kCurrentUserKey = @"kCurrentUserKey";
 NSString * const kAccountsKey = @"kAccountsKey";
 
 + (NSArray *)accounts {
-    _accountsArray = [NSMutableArray array];
-    NSArray *accounts = [[NSUserDefaults standardUserDefaults] arrayForKey:kAccountsKey];
-    for (NSData *data in accounts) {
-        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
-        User *user = [[User alloc] initWithDictionary:dictionary];
-        [_accountsArray addObject:user];
+    if (_accountsArray == nil) {
+        _accountsArray = [NSMutableArray array];
+        NSArray *accounts = [[NSUserDefaults standardUserDefaults] arrayForKey:kAccountsKey];
+        for (NSData *data in accounts) {
+            NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+            User *user = [[User alloc] initWithDictionary:dictionary];
+            [_accountsArray addObject:user];
+        }
+        if ([_accountsArray count] == 0) {
+            [self addAccount:[self currentUser]];
+        }
     }
     return _accountsArray;
 }
@@ -65,6 +70,44 @@ NSString * const kAccountsKey = @"kAccountsKey";
         NSLog(@"add account error: %@", error);
     }
     [array addObject:data];
+    [[NSUserDefaults standardUserDefaults] setObject:array forKey:kAccountsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    _accountsArray = [NSMutableArray array];
+    for (NSData *data in array) {
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+        User *user = [[User alloc] initWithDictionary:dictionary];
+        [_accountsArray addObject:user];
+    }
+}
+
++ (void)removeAccount:(User *)user {
+    NSInteger remove = -1;
+    for (int i = 0; i < _accountsArray.count; i++) {
+        if ([user.screenname isEqualToString:((User *)_accountsArray[i]).screenname]) {
+            remove = i;
+        }
+    }
+    if (remove >= 0) {
+        [_accountsArray removeObjectAtIndex:remove];
+    }
+    
+    
+    for (User *u in _accountsArray) {
+        if ([user.screenname isEqualToString:u.screenname]) {
+            [_accountsArray removeObject:u];
+        }
+    }
+    
+    NSMutableArray *array = [NSMutableArray array];
+    for (User *u in _accountsArray) {
+        NSError *error;
+        NSData *data = [NSJSONSerialization dataWithJSONObject:u.dictionary options:0 error:&error];
+        if (error) {
+            NSLog(@"add account error: %@", error);
+        }
+        [array addObject:data];
+    }
     [[NSUserDefaults standardUserDefaults] setObject:array forKey:kAccountsKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

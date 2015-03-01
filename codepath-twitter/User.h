@@ -30,6 +30,7 @@ extern NSString * const UserDidSwitchNotification;
 + (void)setCurrentUser:(User *)user;
 + (NSArray *)accounts;
 + (void)switchUser:(User *)user;
++ (void)removeAccount:(User *)user;
 + (void)logout;
 
 @end
