@@ -34,14 +34,19 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
     return instance;
 }
 
-- (void)loginWithCompletion:(void (^)(User *user, NSError *error))completion {
+- (void)loginWithScreenName:(NSString *)name completion:(void (^)(User *user, NSError *error))completion {
     self.loginCompletion = completion;
     
     [self.requestSerializer removeAccessToken];
     [self fetchRequestTokenWithPath:@"oauth/request_token" method:@"GET" callbackURL:[NSURL URLWithString:@"cptwitter://oauth"] scope:nil success:^(BDBOAuth1Credential *requestToken) {
         NSLog(@"got the request token!");
         
-        NSURL *authURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://api.twitter.com/oauth/authorize?oauth_token=%@", requestToken.token]];
+        NSString *urlString = [NSString stringWithFormat:@"https://api.twitter.com/oauth/authorize?force_login=true&oauth_token=%@", requestToken.token];
+        if (name != nil) {
+            urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&screen_name=%@", name]];
+        }
+        
+        NSURL *authURL = [NSURL URLWithString:urlString];
         [[UIApplication sharedApplication] openURL:authURL];
         
     } failure:^(NSError *error) {
@@ -73,7 +78,16 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
 }
 
 - (void)homeTimelineWithParams:(NSDictionary *)params completion:(void (^)(NSArray *, NSError *))completion {
-    [self GET:@"1.1/statuses/home_timeline.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [self GET:@"1.1/statuses/home_timeline.json?include_my_retweet=1" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSArray *tweets = [Tweet tweetsWithArray:responseObject];
+        completion(tweets, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
+}
+
+- (void)mentionsTimelineWithParams:(NSDictionary *)params completion:(void (^)(NSArray *, NSError *))completion {
+    [self GET:@"1.1/statuses/mentions_timeline.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSArray *tweets = [Tweet tweetsWithArray:responseObject];
         completion(tweets, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, TWTSideMenuAnimationType) {
 
 CGFloat const scaleFactor = 0.5634;
 UIOffset const edgeTranslate = {20.0f, 0.0f};
-static NSTimeInterval const animateDuration = 0.2;
+static NSTimeInterval const animateDuration = 2;
 static NSTimeInterval const animateDelay = 0.2;
 static NSTimeInterval const animateCloseDuration = 0.3;
 static NSTimeInterval const animateSwitchDuration = 0.3;
@@ -36,9 +36,13 @@ static TWTSideMenuAnimationType const animationType = TWTSideMenuAnimationTypeFa
 CGPoint mainOriginalCenter;
 CGPoint menuOriginalCenter;
 CGRect mainOriginalBounds;
-CGRect menuOriginalBounds;
+CGRect menuOriginalFrame;
 CGAffineTransform mainOpenTransform;
+CGAffineTransform mainNewTransform;
 CGAffineTransform menuClosedTransform;
+CGFloat translateMax;
+CGFloat translatedX;
+CGFloat currScale;
 
 - (id)initWithMainViewController:(UIViewController *)mainViewController menuViewController:(UIViewController *)menuViewController {
     self = [super initWithNibName:nil bundle:nil];
@@ -56,6 +60,8 @@ CGAffineTransform menuClosedTransform;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor colorWithRed:85/255.0 green:172/255.0 blue:238/255.0 alpha:1];
+    
     [self addChildViewController:self.mainViewController];
     self.masterContentView = [[UIView alloc] initWithFrame:self.view.bounds];
     self.masterContentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -69,20 +75,20 @@ CGAffineTransform menuClosedTransform;
     [self.view insertSubview:self.menuViewController.view belowSubview:self.masterContentView];
     [self.menuViewController didMoveToParentViewController:self];
     
-    [self updateMenuViewWithTransform:[self transformForClosedMenu]];
+    mainOpenTransform = [self openTransformForView:self.masterContentView];
+    menuClosedTransform = [self transformForClosedMenu];
+    mainOriginalCenter = self.mainViewController.view.center;
+    menuOriginalCenter = self.menuViewController.view.center;
+    menuOriginalFrame = self.menuViewController.view.frame;
+    translateMax = CGRectGetMidX(self.masterContentView.bounds) + edgeTranslate.horizontal;
+    [self updateMenuViewWithTransform:menuClosedTransform];
     
     self.view.userInteractionEnabled = YES;
     self.masterContentView.userInteractionEnabled = YES;
     self.mainViewController.view.userInteractionEnabled = YES;
     self.menuViewController.view.userInteractionEnabled = YES;
-    
-    mainOpenTransform = [self openTransformForView:self.masterContentView];
-    //menuClosedTransform = [self transformForClosedMenu];
-    
-//    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-//    [self.view addGestureRecognizer:panGestureRecognizer];
-    
-    UISwipeGestureRecognizer *panGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipe:)];
+
+    UIPanGestureRecognizer *panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self.view addGestureRecognizer:panGestureRecognizer];
 }
 
@@ -95,43 +101,27 @@ CGAffineTransform menuClosedTransform;
     [self toggleMenuAnimated:YES completion:nil];
 }
 
-- (void)handlePan:(UIPanGestureRecognizer *)recognizer {
-    
-    CGPoint point = [recognizer locationInView:self.view];
-    CGPoint translate = [recognizer translationInView:self.view];
-    CGFloat scaleValue = 1 / scaleFactor;
+- (void)handlePan:(UIPanGestureRecognizer *)panGesture {
+    CGPoint translation = [panGesture translationInView:panGesture.view.superview];
+    CGPoint velocity = [panGesture velocityInView:panGesture.view.superview];
 
-    
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        mainOriginalCenter = self.masterContentView.center;
-        menuOriginalCenter = self.menuViewController.view.center;
-        mainOriginalBounds = self.masterContentView.bounds;
-        menuOriginalBounds = self.menuViewController.view.bounds;
-//        mainOriginalTransform = self.masterContentView.transform;
-//        menuOriginalTransform = self.menuViewController.view.transform;
-    } else if (recognizer.state == UIGestureRecognizerStateChanged) {
-        self.masterContentView.center = CGPointMake(mainOriginalCenter.x + point.x, mainOriginalCenter.y);
-        self.menuViewController.view.center = CGPointMake(menuOriginalCenter.x + point.x, menuOriginalCenter.y);
-//        CGAffineTransform mainTransformTranslate = CGAffineTransformTranslate(mainOriginalTransform, CGRectGetMidX(mainOriginalBounds) + translate.x, mainOriginalBounds.origin.y);
-//        self.masterContentView.transform = mainTransformTranslate;//CGAffineTransformScale(mainTransformTranslate, scaleValue * translate.x/edgeTranslate.horizontal, scaleValue * translate.x/edgeTranslate.horizontal);
-//        
-//        CGAffineTransform menuTransformTranslate = CGAffineTransformTranslate(menuOriginalTransform, CGRectGetMidX(menuOriginalBounds) + translate.x, menuOriginalBounds.origin.y);
-//        self.menuViewController.view.transform = menuTransformTranslate;//CGAffineTransformScale(menuTransformTranslate, scaleValue * translate.x/edgeTranslate.horizontal, scaleValue * translate.x/edgeTranslate.horizontal);
+    if (panGesture.state == UIGestureRecognizerStateBegan) {
+
+    } else if (panGesture.state == UIGestureRecognizerStateChanged) {
         
-    } else if (recognizer.state == UIGestureRecognizerStateEnded) {
-        //[self toggleMenuAnimated:YES completion:nil];
-        if (self.menuOpen == YES) {
-            self.masterContentView.transform = CGAffineTransformIdentity;
-            self.menuViewController.view.transform = [self transformForClosedMenu];
-        } else {
-            //self.masterContentView.center = CGPointMake(mainOriginalCenter.x + mainOpenTransform.tx, mainOriginalCenter.y + mainOpenTransform.ty);
-            self.masterContentView.transform = [self openTransformForView:self.view];
-            self.menuViewController.view.transform = CGAffineTransformIdentity;
+        panGesture.view.center = CGPointMake(mainOriginalCenter.x + translation.x, panGesture.view.center.y);
+        panGesture.view.transform = CGAffineTransformMakeScale(1 - (translation.x / 700), 1 - (translation.x / 700));
+        
+    } else if (panGesture.state == UIGestureRecognizerStateEnded) {
+        if ((self.menuOpen && velocity.x < 0) || (!self.menuOpen && velocity.x > 0)) {
+            mainNewTransform = CGAffineTransformMake(mainOpenTransform.a - panGesture.view.transform.a, mainOpenTransform.b - panGesture.view.transform.b,
+                                                     mainOpenTransform.c - panGesture.view.transform.c, mainOpenTransform.d - panGesture.view.transform.d, mainOpenTransform.tx - translation.x, 0);
+            [self toggleMenuAnimated:YES completion:nil];
         }
-        self.menuOpen = !self.menuOpen;
+//        panGesture.view.center = mainOriginalCenter;
+//        panGesture.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
     }
 }
-
 
 
 - (void)updateMenuViewWithTransform:(CGAffineTransform)transform {
@@ -161,13 +151,14 @@ CGAffineTransform menuClosedTransform;
 
     self.menuOpen = YES;
     self.menuViewController.view.transform = [self transformForClosedMenu];
+//    self.menuViewController.view.transform = menuClosedTransform;
     
     [UIView animateWithDuration:animateDuration
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.menuViewController.view.transform = CGAffineTransformIdentity;
-                         self.masterContentView.transform = [self openTransformForView:self.masterContentView];
+                         self.masterContentView.transform = mainNewTransform;//[self openTransformForView:self.masterContentView];
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
@@ -260,13 +251,11 @@ CGAffineTransform menuClosedTransform;
         delayInterval = 0.0;
     }
     
-//    [self addShadowToViewController:incomingViewController];
     [self addViewController:incomingViewController];
     [self.masterContentView addSubview:incomingViewController.view];
     
     incomingViewController.view.frame = self.masterContentView.bounds;
     
-    //Create default animation curve.
     UIViewAnimationOptions options = UIViewAnimationOptionCurveEaseInOut;
     switch (animationType) {
         case TWTSideMenuAnimationTypeSlideOver: {

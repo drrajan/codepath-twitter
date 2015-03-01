@@ -28,14 +28,12 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLogout) name:UserDidLogoutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidSwitch) name:UserDidSwitchNotification object:nil];
     
     User *user = [User currentUser];
     if (user != nil ) {
         NSLog(@"Welcome %@", user.name);
-        MenuViewController *menuViewController = [[MenuViewController alloc] init];
-        TweetsViewController *tweetsViewController = [[TweetsViewController alloc] init];
-        MasterViewController *masterViewController = [[MasterViewController alloc] initWithMainViewController:[[UINavigationController alloc] initWithRootViewController:tweetsViewController] menuViewController:menuViewController];
-        self.window.rootViewController = masterViewController;
+        [self userDidSwitch];
 //        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] init]];
         
     } else {
@@ -54,6 +52,13 @@
 
 - (void)userDidLogout {
     self.window.rootViewController = [[LoginViewController alloc] init];
+}
+
+- (void)userDidSwitch {
+    MenuViewController *menuViewController = [[MenuViewController alloc] init];
+    TweetsViewController *tweetsViewController = [[TweetsViewController alloc] init];
+    MasterViewController *masterViewController = [[MasterViewController alloc] initWithMainViewController:[[UINavigationController alloc] initWithRootViewController:tweetsViewController] menuViewController:menuViewController];
+    self.window.rootViewController = masterViewController;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

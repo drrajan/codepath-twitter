@@ -37,5 +37,9 @@
     [self.masterViewController setMainViewController:tweetsViewController animated:YES closeMenu:YES];
 }
 
+- (IBAction)onMentionsButton:(id)sender {
+    UINavigationController *tweetsViewController = [[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] initWithMentions:YES]];
+    [self.masterViewController setMainViewController:tweetsViewController animated:YES closeMenu:YES];
+}
 
 @end

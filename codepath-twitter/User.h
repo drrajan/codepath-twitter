@@ -10,6 +10,7 @@
 
 extern NSString * const UserDidLoginNotification;
 extern NSString * const UserDidLogoutNotification;
+extern NSString * const UserDidSwitchNotification;
 
 @interface User : NSObject
 
@@ -27,7 +28,8 @@ extern NSString * const UserDidLogoutNotification;
 
 + (User *)currentUser;
 + (void)setCurrentUser:(User *)user;
-
++ (NSArray *)accounts;
++ (void)switchUser:(User *)user;
 + (void)logout;
 
 @end

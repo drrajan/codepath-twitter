@@ -11,6 +11,7 @@
 
 NSString * const UserDidLoginNotification = @"UserDidLoginNotification";
 NSString * const UserDidLogoutNotification = @"UserDidLogoutNotification";
+NSString * const UserDidSwitchNotification = @"UserDidSwitchNotification";
 
 @interface User()
 
@@ -39,8 +40,34 @@ NSString * const UserDidLogoutNotification = @"UserDidLogoutNotification";
 }
 
 static User *_currentUser = nil;
+static NSMutableArray *_accountsArray = nil;
 
 NSString * const kCurrentUserKey = @"kCurrentUserKey";
+NSString * const kAccountsKey = @"kAccountsKey";
+
++ (NSArray *)accounts {
+    _accountsArray = [NSMutableArray array];
+    NSArray *accounts = [[NSUserDefaults standardUserDefaults] arrayForKey:kAccountsKey];
+    for (NSData *data in accounts) {
+        NSDictionary *dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:NULL];
+        User *user = [[User alloc] initWithDictionary:dictionary];
+        [_accountsArray addObject:user];
+    }
+    return _accountsArray;
+}
+
++ (void)addAccount:(User *)user {
+    NSMutableArray *array = [[[NSUserDefaults standardUserDefaults] arrayForKey:kAccountsKey] mutableCopy];
+    
+    NSError *error;
+    NSData *data = [NSJSONSerialization dataWithJSONObject:user.dictionary options:0 error:&error];
+    if (error) {
+        NSLog(@"add account error: %@", error);
+    }
+    [array addObject:data];
+    [[NSUserDefaults standardUserDefaults] setObject:array forKey:kAccountsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
 
 + (User *)currentUser {
     
@@ -65,11 +92,36 @@ NSString * const kCurrentUserKey = @"kCurrentUserKey";
         }
         [[NSUserDefaults standardUserDefaults] setObject:data forKey:kCurrentUserKey];
         
+        BOOL userAdd = YES;
+        for (User *user in [self accounts]) {
+            if ([[self currentUser].screenname isEqualToString:user.screenname]) {
+                userAdd = NO;
+            }
+        }
+        if (userAdd) {
+            [self addAccount:[self currentUser]];
+        }
+        
     } else {
         [[NSUserDefaults standardUserDefaults] setObject:nil forKey:kCurrentUserKey];
     }
     
     [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (void)switchUser:(User *)theUser {
+    if ([[self currentUser].screenname isEqualToString:theUser.screenname]) {
+        return;
+    }
+    [[TwitterClient sharedInstance] loginWithScreenName:[theUser.screenname substringFromIndex:1] completion:^(User *user, NSError *error) {
+        if (user != nil) {
+            NSLog(@"Welcome to %@", user.name);
+            [self setCurrentUser:user];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UserDidSwitchNotification object:nil];
+        } else {
+            NSLog(@"Error getting user");
+        }
+    }];
 }
 
 + (void)logout {

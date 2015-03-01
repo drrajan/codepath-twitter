@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		634FE8141AA2EEF600870059 /* AccountsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FE8121AA2EEF600870059 /* AccountsViewController.m */; };
+		634FE8151AA2EEF600870059 /* AccountsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 634FE8131AA2EEF600870059 /* AccountsViewController.xib */; };
+		634FE8191AA2F6C500870059 /* AccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 634FE8171AA2F6C500870059 /* AccountCell.m */; };
+		634FE81A1AA2F6C500870059 /* AccountCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 634FE8181AA2F6C500870059 /* AccountCell.xib */; };
 		63CF5A3E1A93FFD3008BB690 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CF5A3D1A93FFD3008BB690 /* main.m */; };
 		63CF5A411A93FFD3008BB690 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CF5A401A93FFD3008BB690 /* AppDelegate.m */; };
 		63CF5A491A93FFD3008BB690 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63CF5A481A93FFD3008BB690 /* Images.xcassets */; };
@@ -48,6 +52,12 @@
 
 /* Begin PBXFileReference section */
 		05F875A345AA006BC70BFB63 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		634FE8111AA2EEF600870059 /* AccountsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountsViewController.h; sourceTree = "<group>"; };
+		634FE8121AA2EEF600870059 /* AccountsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountsViewController.m; sourceTree = "<group>"; };
+		634FE8131AA2EEF600870059 /* AccountsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountsViewController.xib; sourceTree = "<group>"; };
+		634FE8161AA2F6C500870059 /* AccountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCell.h; sourceTree = "<group>"; };
+		634FE8171AA2F6C500870059 /* AccountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountCell.m; sourceTree = "<group>"; };
+		634FE8181AA2F6C500870059 /* AccountCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountCell.xib; sourceTree = "<group>"; };
 		63CF5A381A93FFD3008BB690 /* codepath-twitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "codepath-twitter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CF5A3C1A93FFD3008BB690 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63CF5A3D1A93FFD3008BB690 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -205,6 +215,9 @@
 				63D84C671AA01ED000974A5B /* ProfileHeaderCell.h */,
 				63D84C681AA01ED000974A5B /* ProfileHeaderCell.m */,
 				63D84C691AA01ED000974A5B /* ProfileHeaderCell.xib */,
+				634FE8161AA2F6C500870059 /* AccountCell.h */,
+				634FE8171AA2F6C500870059 /* AccountCell.m */,
+				634FE8181AA2F6C500870059 /* AccountCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -241,6 +254,9 @@
 				63D84C261A9E8D9200974A5B /* MenuViewController.h */,
 				63D84C271A9E8D9200974A5B /* MenuViewController.m */,
 				63D84C281A9E8D9200974A5B /* MenuViewController.xib */,
+				634FE8111AA2EEF600870059 /* AccountsViewController.h */,
+				634FE8121AA2EEF600870059 /* AccountsViewController.m */,
+				634FE8131AA2EEF600870059 /* AccountsViewController.xib */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -343,10 +359,12 @@
 				63CF5A7A1A96649E008BB690 /* TweetCell.xib in Resources */,
 				63D84C2A1A9E8D9200974A5B /* MenuViewController.xib in Resources */,
 				63CF5A4C1A93FFD3008BB690 /* LaunchScreen.xib in Resources */,
+				634FE81A1AA2F6C500870059 /* AccountCell.xib in Resources */,
 				63CF5A491A93FFD3008BB690 /* Images.xcassets in Resources */,
 				63D84C6B1AA01ED000974A5B /* ProfileHeaderCell.xib in Resources */,
 				63CF5A651A94038A008BB690 /* LoginViewController.xib in Resources */,
 				63D84C2F1A9EADD100974A5B /* ProfileViewController.xib in Resources */,
+				634FE8151AA2EEF600870059 /* AccountsViewController.xib in Resources */,
 				63D863D91A998F8700EC14EF /* ComposeViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,6 +420,8 @@
 				63CF5A411A93FFD3008BB690 /* AppDelegate.m in Sources */,
 				63CF5A6F1A9428AA008BB690 /* User.m in Sources */,
 				63D863D81A998F8700EC14EF /* ComposeViewController.m in Sources */,
+				634FE8141AA2EEF600870059 /* AccountsViewController.m in Sources */,
+				634FE8191AA2F6C500870059 /* AccountCell.m in Sources */,
 				63CF5A6C1A94289A008BB690 /* Tweet.m in Sources */,
 				63CF5A3E1A93FFD3008BB690 /* main.m in Sources */,
 				63D84C6A1AA01ED000974A5B /* ProfileHeaderCell.m in Sources */,

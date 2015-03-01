@@ -17,7 +17,7 @@
 @implementation LoginViewController
 
 - (IBAction)onLogin:(id)sender {
-    [[TwitterClient sharedInstance] loginWithCompletion:^(User *user, NSError *error) {
+    [[TwitterClient sharedInstance] loginWithScreenName:nil completion:^(User *user, NSError *error) {
         if (user != nil) {
             NSLog(@"Welcome to %@", user.name);
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:[[TweetsViewController alloc] init]] animated:YES completion:nil];

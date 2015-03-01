@@ -22,17 +22,34 @@
 @property (strong, nonatomic) BDBSpinKitRefreshControl *refreshControl;
 @property (strong, nonatomic) UIColor *retweetColor;
 @property (strong, nonatomic) UIColor *favoriteColor;
-
 @property (strong, nonatomic) NSArray *tweets;
+@property (nonatomic, assign) BOOL mentions;
 
 @end
 
 @implementation TweetsViewController
 
+- (id)init {
+    return [self initWithMentions:NO];
+}
+
+- (id)initWithMentions:(BOOL)mentions {
+    self = [super init];
+    NSLog(mentions ? @"Yes" : @"No");
+    if (self) {
+        _mentions = mentions;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    if (self.mentions) {
+        self.title = @"Mentions";
+    } else {
+        self.title = @"Home";
+    }
     self.navigationController.navigationBar.translucent = NO;
-    self.title = @"Home";
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(onLogoutButton)];
     
@@ -74,11 +91,20 @@
 
 - (void)refresh:(id)sender withParams:(NSDictionary *)params {
     NSLog(@"Refreshing");
-    [[TwitterClient sharedInstance] homeTimelineWithParams:params completion:^(NSArray *tweets, NSError *error) {
-        self.tweets = tweets;
-        [self.tableView reloadData];
-        [(BDBSpinKitRefreshControl *)sender endRefreshing];
-    }];
+    
+    if (self.mentions) {
+        [[TwitterClient sharedInstance] mentionsTimelineWithParams:params completion:^(NSArray *tweets, NSError *error) {
+            self.tweets = tweets;
+            [self.tableView reloadData];
+            [(BDBSpinKitRefreshControl *)sender endRefreshing];
+        }];
+    } else {
+        [[TwitterClient sharedInstance] homeTimelineWithParams:params completion:^(NSArray *tweets, NSError *error) {
+            self.tweets = tweets;
+            [self.tableView reloadData];
+            [(BDBSpinKitRefreshControl *)sender endRefreshing];
+        }];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -134,7 +160,7 @@
     cell.profileImageView.userInteractionEnabled = YES;
     [cell.profileImageView addGestureRecognizer:tgr];
     
-    if (indexPath.row == self.tweets.count -1) {
+    if (!self.mentions && indexPath.row == self.tweets.count -1) {
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
         [dictionary setValue:tweet.retweetID forKey:@"max_id"];
         [self refresh:nil withParams:dictionary];

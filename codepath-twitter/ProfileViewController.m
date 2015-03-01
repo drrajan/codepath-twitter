@@ -11,6 +11,7 @@
 #import "ComposeViewController.h"
 #import "TwitterClient.h"
 #import "TweetCell.h"
+#import "AccountsViewController.h"
 
 @interface ProfileViewController () <UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate>
 
@@ -44,6 +45,9 @@
     [super viewDidLoad];
     self.title = @"Profile";
     
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPress:)];
+    [self.navigationController.navigationBar addGestureRecognizer:longPressGestureRecognizer];
+    
     self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
     self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
     
@@ -74,6 +78,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)onLongPress:(id)sender {
+    NSLog(@"long press");
+    [self.navigationController pushViewController:[AccountsViewController new] animated:YES];
 }
 
 - (void)refresh:(id)sender withParams:(NSDictionary *)params {

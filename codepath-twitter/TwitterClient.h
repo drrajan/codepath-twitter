@@ -14,10 +14,11 @@
 
 + (TwitterClient *)sharedInstance;
 
-- (void)loginWithCompletion:(void (^)(User *user, NSError *error))completion;
+- (void)loginWithScreenName:(NSString *)name completion:(void (^)(User *user, NSError *error))completion;
 - (void)openURL:(NSURL *)url;
 
 - (void)homeTimelineWithParams:(NSDictionary *)params completion:(void (^)(NSArray *tweets, NSError *error))completion;
+- (void)mentionsTimelineWithParams:(NSDictionary *)params completion:(void (^)(NSArray *tweets, NSError *error))completion;
 - (void)profileWithParams:(NSDictionary *)params completion:(void (^)(NSArray *tweets, NSError *error))completion;
 - (void)postStatusWithParams:(NSDictionary *)params completion:(void (^)(Tweet *tweet, NSError *))completion;
 - (void)postRetweetWithID:(NSString *)tweetID completion:(void (^)(Tweet *tweet, NSError *))completion;
