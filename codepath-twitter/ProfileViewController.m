@@ -73,7 +73,7 @@
     self.headerView.user = self.user;
     [self.headerView setNeedsLayout];
     [self.headerView layoutIfNeeded];
-    CGFloat height = [self.headerView.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height + self.headerView.contentView.frame.origin.y; // adding the origin because innerHeaderView starts partway down headerView.
+    CGFloat height = [self.headerView.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height + self.headerView.contentView.frame.origin.y;
     
     CGRect headerFrame = self.headerView.frame;
     headerFrame.size.height = height;

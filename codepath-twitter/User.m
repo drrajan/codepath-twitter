@@ -29,6 +29,7 @@ NSString * const UserDidSwitchNotification = @"UserDidSwitchNotification";
         self.userid = dictionary[@"id_str"];
         self.screenname = [NSString stringWithFormat:@"@%@", dictionary[@"screen_name"]];
         self.profileImageUrl = dictionary[@"profile_image_url"];
+        self.profileBannerUrl = [NSString stringWithFormat:@"%@/mobile_retina", dictionary[@"profile_banner_url"]];
         self.location = dictionary[@"location"];
         self.tagline = dictionary[@"description"];
         self.followersCount = [NSString stringWithFormat:@"%@", dictionary[@"followers_count"]];

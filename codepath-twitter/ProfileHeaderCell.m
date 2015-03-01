@@ -7,6 +7,7 @@
 //
 
 #import "ProfileHeaderCell.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface ProfileHeaderCell ()
 
@@ -17,6 +18,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *tweetsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *followLabel;
 @property (weak, nonatomic) IBOutlet UILabel *followersLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *profileBannerView;
 
 @end
 
@@ -45,6 +48,9 @@
     self.followersLabel.text = user.followersCount;
     
     self.descriptionLabel.preferredMaxLayoutWidth = self.descriptionLabel.bounds.size.width;
+    [self.profileImageView setImageWithURL:[NSURL URLWithString:user.profileImageUrl]];
+    [self.profileBannerView setImageWithURL:[NSURL URLWithString:user.profileBannerUrl]];
+    NSLog(@"banner: %@", user.profileBannerUrl);
 
 }
 
