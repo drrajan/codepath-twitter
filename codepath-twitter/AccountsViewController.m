@@ -70,7 +70,10 @@ static AccountCell *swipedCell;
         cell.preservesSuperviewLayoutMargins = NO;
         [cell setLayoutMargins:UIEdgeInsetsZero];
         
-        cell.textLabel.text = @"+";
+        cell.textLabel.text = @"";
+        cell.textLabel.font = [UIFont fontWithName:@"icomoon" size:24.0f];
+        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.backgroundColor = [UIColor darkGrayColor];
         cell.textLabel.textAlignment = NSTextAlignmentCenter;
         return cell;
     } else {
@@ -97,8 +100,6 @@ static AccountCell *swipedCell;
         swipedCell = (AccountCell *)[self.tableView cellForRowAtIndexPath:swipedIndexPath];
         origConstant = swipedCell.viewConstraint.constant;
     } else if (pgr.state == UIGestureRecognizerStateChanged) {
-        CGFloat change = origConstant - translation.x;
-        if (origConstant - translation.x)
         swipedCell.viewConstraint.constant = origConstant - translation.x;
     }
 }

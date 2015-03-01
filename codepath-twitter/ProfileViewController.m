@@ -80,9 +80,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)onLongPress:(id)sender {
-    NSLog(@"long press");
-    [self.navigationController pushViewController:[AccountsViewController new] animated:YES];
+- (void)onLongPress:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        self.navigationController.navigationBar.barTintColor = [UIColor redColor];
+    } else if (sender.state == UIGestureRecognizerStateEnded) {
+         NSLog(@"long press");
+        self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:85/255.0f green:172/255.0f blue:238/255.0f alpha:1];
+        [self.navigationController pushViewController:[AccountsViewController new] animated:YES];
+    }
 }
 
 - (void)refresh:(id)sender withParams:(NSDictionary *)params {
