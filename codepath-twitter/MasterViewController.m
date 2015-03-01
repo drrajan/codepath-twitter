@@ -20,28 +20,21 @@
 
 @implementation MasterViewController
 
-typedef NS_ENUM(NSInteger, TWTSideMenuAnimationType) {
-    TWTSideMenuAnimationTypeSlideOver, //Default - new view controllers slide over the old view controller.
-    TWTSideMenuAnimationTypeFadeIn //New View controllers fade in over the old view controller.
-};
-
-CGFloat const scaleFactor = 0.5634;
-UIOffset const edgeTranslate = {20.0f, 0.0f};
-static NSTimeInterval const animateDuration = 2;
+CGFloat const scaleFactor = 0.7f;
+static CGFloat const edgeTranslate = 20.0f;
+static NSTimeInterval const animateDuration = 1;
 static NSTimeInterval const animateDelay = 0.2;
 static NSTimeInterval const animateCloseDuration = 0.3;
 static NSTimeInterval const animateSwitchDuration = 0.3;
-static TWTSideMenuAnimationType const animationType = TWTSideMenuAnimationTypeFadeIn;
 
 CGPoint mainOriginalCenter;
-CGPoint menuOriginalCenter;
-CGRect mainOriginalBounds;
+CGPoint mainClosedCenter;
+CGRect mainOriginalFrame;
 CGRect menuOriginalFrame;
 CGAffineTransform mainOpenTransform;
-CGAffineTransform mainNewTransform;
+CGAffineTransform newTransform;
 CGAffineTransform menuClosedTransform;
 CGFloat translateMax;
-CGFloat translatedX;
 CGFloat currScale;
 
 - (id)initWithMainViewController:(UIViewController *)mainViewController menuViewController:(UIViewController *)menuViewController {
@@ -78,9 +71,9 @@ CGFloat currScale;
     mainOpenTransform = [self openTransformForView:self.masterContentView];
     menuClosedTransform = [self transformForClosedMenu];
     mainOriginalCenter = self.mainViewController.view.center;
-    menuOriginalCenter = self.menuViewController.view.center;
+//    menuOriginalCenter = self.menuViewController.view.center;
     menuOriginalFrame = self.menuViewController.view.frame;
-    translateMax = CGRectGetMidX(self.masterContentView.bounds) + edgeTranslate.horizontal;
+    translateMax = CGRectGetMidX(self.masterContentView.bounds) + edgeTranslate;
     [self updateMenuViewWithTransform:menuClosedTransform];
     
     self.view.userInteractionEnabled = YES;
@@ -102,44 +95,57 @@ CGFloat currScale;
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)panGesture {
-    CGPoint translation = [panGesture translationInView:panGesture.view.superview];
-    CGPoint velocity = [panGesture velocityInView:panGesture.view.superview];
+    CGPoint translation = [panGesture translationInView:panGesture.view];
+    CGPoint velocity = [panGesture velocityInView:panGesture.view];
 
     if (panGesture.state == UIGestureRecognizerStateBegan) {
 
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {
         
-        panGesture.view.center = CGPointMake(mainOriginalCenter.x + translation.x, panGesture.view.center.y);
-        panGesture.view.transform = CGAffineTransformMakeScale(1 - (translation.x / 700), 1 - (translation.x / 700));
+        CGFloat scale = 1;
+        CGFloat currCenter = mainOriginalCenter.x;
+        if (self.menuOpen) {
+            currCenter = self.view.frame.size.width;
+            scale = self.masterContentView.transform.a;
+        }
+        
+        self.masterContentView.center = CGPointMake(currCenter + translation.x, panGesture.view.center.y);
+        self.masterContentView.transform = CGAffineTransformMakeScale(scale - (translation.x / 650), scale - (translation.x / 650));
         
     } else if (panGesture.state == UIGestureRecognizerStateEnded) {
+        CGAffineTransform tmp;
+        if (self.menuOpen) {
+            tmp = CGAffineTransformInvert(menuClosedTransform);
+        } else {
+            tmp = CGAffineTransformInvert(mainOpenTransform);
+        }
+
         if ((self.menuOpen && velocity.x < 0) || (!self.menuOpen && velocity.x > 0)) {
-            mainNewTransform = CGAffineTransformMake(mainOpenTransform.a - panGesture.view.transform.a, mainOpenTransform.b - panGesture.view.transform.b,
-                                                     mainOpenTransform.c - panGesture.view.transform.c, mainOpenTransform.d - panGesture.view.transform.d, mainOpenTransform.tx - translation.x, 0);
+            newTransform = CGAffineTransformMake(tmp.a - panGesture.view.transform.a, tmp.b - panGesture.view.transform.b,
+                                                 tmp.c - panGesture.view.transform.c, tmp.d - panGesture.view.transform.d,
+                                                 mainOpenTransform.tx - translation.x, 0);
             [self toggleMenuAnimated:YES completion:nil];
         }
-//        panGesture.view.center = mainOriginalCenter;
-//        panGesture.view.transform = CGAffineTransformMakeScale(1.0, 1.0);
     }
 }
 
 
 - (void)updateMenuViewWithTransform:(CGAffineTransform)transform {
     self.menuViewController.view.transform = transform;
-    self.menuViewController.view.center = (CGPoint) { CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds) };
+    self.menuViewController.view.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
     self.menuViewController.view.bounds = self.view.bounds;
 }
 
 -(CGAffineTransform)transformForClosedMenu {
     CGFloat transformValue = 1.0f / scaleFactor;
     CGAffineTransform transformScale = CGAffineTransformScale(self.menuViewController.view.transform, transformValue, transformValue);
-    return CGAffineTransformTranslate(transformScale, -(CGRectGetMidX(self.view.bounds)) - edgeTranslate.horizontal, -edgeTranslate.vertical);
+    return CGAffineTransformTranslate(transformScale, -(CGRectGetMidX(self.view.bounds)) - edgeTranslate, 0);
 }
 
 - (CGAffineTransform)openTransformForView:(UIView *)view
 {
     CGFloat transformSize = scaleFactor;
-    CGAffineTransform transformTranslate = CGAffineTransformTranslate(view.transform, CGRectGetMidX(view.bounds) + edgeTranslate.horizontal, edgeTranslate.vertical);
+    CGAffineTransform transformTranslate = CGAffineTransformTranslate(view.transform, CGRectGetMidX(view.bounds) + edgeTranslate, 0);
     return CGAffineTransformScale(transformTranslate, transformSize, transformSize);
 }
 
@@ -151,17 +157,17 @@ CGFloat currScale;
 
     self.menuOpen = YES;
     self.menuViewController.view.transform = [self transformForClosedMenu];
-//    self.menuViewController.view.transform = menuClosedTransform;
     
     [UIView animateWithDuration:animateDuration
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          self.menuViewController.view.transform = CGAffineTransformIdentity;
-                         self.masterContentView.transform = mainNewTransform;//[self openTransformForView:self.masterContentView];
+                         self.masterContentView.transform = newTransform;
                      }
                      completion:^(BOOL finished) {
                          if (finished) {
+                             mainClosedCenter = self.masterContentView.center;
                              [self addOverlayButtonToMainViewController];
                          }
                      }
@@ -177,13 +183,14 @@ CGFloat currScale;
     self.menuOpen = NO;
     
     [self removeOverlayButtonFromMainViewController];
+    self.masterContentView.center = mainOriginalCenter;
     
     
     [UIView animateWithDuration:animateDuration
                           delay:0.0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         self.menuViewController.view.transform = [self transformForClosedMenu];
+                         self.menuViewController.view.transform = newTransform;
                          self.masterContentView.transform = CGAffineTransformIdentity;
                      }
                      completion:^(BOOL finished) {
@@ -232,17 +239,12 @@ CGFloat currScale;
 }
 
 - (void)setMainViewController:(UIViewController *)mainViewController animated:(BOOL)animated closeMenu:(BOOL)closeMenu {
-    UIViewController *outgoingViewController = self.mainViewController;
-    UIViewController *incomingViewController = mainViewController;
+    UIViewController *from = self.mainViewController;
+    UIViewController *to = mainViewController;
     
-    UIView *overlayView = [[UIView alloc] initWithFrame:outgoingViewController.view.frame];
+    UIView *overlayView = [[UIView alloc] initWithFrame:from.view.frame];
     overlayView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8f];
     [self.masterContentView addSubview:overlayView];
-    
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"opacity"];
-    animation.fromValue = @0.0f;
-    animation.duration = animateDuration;
-    [overlayView.layer addAnimation:animation forKey:@"opacity"];
     
     NSTimeInterval changeTimeInterval = animateSwitchDuration;
     NSTimeInterval delayInterval = animateDelay;
@@ -251,63 +253,34 @@ CGFloat currScale;
         delayInterval = 0.0;
     }
     
-    [self addViewController:incomingViewController];
-    [self.masterContentView addSubview:incomingViewController.view];
+    [self addViewController:to];
+    [self.masterContentView addSubview:to.view];
     
-    incomingViewController.view.frame = self.masterContentView.bounds;
+    to.view.frame = self.masterContentView.bounds;
     
-    UIViewAnimationOptions options = UIViewAnimationOptionCurveEaseInOut;
-    switch (animationType) {
-        case TWTSideMenuAnimationTypeSlideOver: {
-            CGFloat outgoingStartX = CGRectGetMaxX(outgoingViewController.view.frame);
-            
-            incomingViewController.view.transform = CGAffineTransformTranslate(incomingViewController.view.transform, outgoingStartX, 0.0f);
-            break;
-        }
-        case TWTSideMenuAnimationTypeFadeIn:
-            incomingViewController.view.alpha = 0.6f;
-            options = UIViewAnimationOptionCurveEaseOut;
-            break;
+    to.view.alpha = 0.6f;
+    UIViewAnimationOptions options = UIViewAnimationOptionCurveEaseOut;
+    
+    if (closeMenu) {
+        [self closeMenuAnimated:animated completion:nil];
     }
     
-    
-    void (^swapChangeBlock)(void) = ^{
-        switch (animationType) {
-            case TWTSideMenuAnimationTypeSlideOver:
-                incomingViewController.view.transform = CGAffineTransformIdentity;
-                break;
-            case TWTSideMenuAnimationTypeFadeIn:
-                incomingViewController.view.alpha = 1.0f;
-            default:
-                break;
-        }
-    };
-    
-    void (^finishedChangeBlock)(BOOL finished) = ^(BOOL finished) {
-        [incomingViewController didMoveToParentViewController:self];
-        
-        [outgoingViewController removeFromParentViewController];
-        [outgoingViewController.view removeFromSuperview];
-        [outgoingViewController didMoveToParentViewController:nil];
-        [overlayView removeFromSuperview];
-        [self.closeButton removeFromSuperview];
-        self.menuOpen = NO;
-    };
-    
-    if (animated) {
-        if (closeMenu) {
-            [self closeMenuAnimated:animated completion:nil];
-        }
-        
-        [UIView animateWithDuration:changeTimeInterval
-                              delay:delayInterval
-                            options:options
-                         animations:swapChangeBlock
-                         completion:finishedChangeBlock];
-    } else {
-        swapChangeBlock();
-        finishedChangeBlock(YES);
-    }
+    [UIView animateWithDuration:changeTimeInterval
+                          delay:delayInterval
+                        options:options
+                     animations:^{
+                         to.view.alpha = 1.0f;
+                     }
+                     completion:^(BOOL finished) {
+                         [to didMoveToParentViewController:self];
+                         
+                         [from removeFromParentViewController];
+                         [from.view removeFromSuperview];
+                         [from didMoveToParentViewController:nil];
+                         [overlayView removeFromSuperview];
+                         [self.closeButton removeFromSuperview];
+                         self.menuOpen = NO;
+                     }];
     
     self.mainViewController = mainViewController;
     self.mainViewController.masterViewController = self;
