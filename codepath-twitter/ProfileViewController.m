@@ -20,6 +20,7 @@
 @property (strong, nonatomic) UIColor *retweetColor;
 @property (strong, nonatomic) UIColor *favoriteColor;
 @property (strong, nonatomic) User *user;
+@property (strong, nonatomic) ProfileHeaderCell *headerView;
 
 @end
 
@@ -44,10 +45,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Profile";
-    
-    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPress:)];
-    [self.navigationController.navigationBar addGestureRecognizer:longPressGestureRecognizer];
-    
+        
     self.retweetColor = [UIColor colorWithRed:119/255.0f green:178/255.0f blue:85/255.0f alpha:1.0f];
     self.favoriteColor = [UIColor colorWithRed:255/255.0f green:172/255.0f blue:51/255.0f alpha:1.0f];
     
@@ -70,6 +68,17 @@
     
     [self.tableView registerNib:[UINib nibWithNibName:@"TweetCell" bundle:nil] forCellReuseIdentifier:@"TweetCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"ProfileHeaderCell" bundle:nil] forCellReuseIdentifier:@"ProfileHeaderCell"];
+    
+    self.headerView = [self.tableView dequeueReusableCellWithIdentifier:@"ProfileHeaderCell"];
+    self.headerView.user = self.user;
+    [self.headerView setNeedsLayout];
+    [self.headerView layoutIfNeeded];
+    CGFloat height = [self.headerView.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height + self.headerView.contentView.frame.origin.y; // adding the origin because innerHeaderView starts partway down headerView.
+    
+    CGRect headerFrame = self.headerView.frame;
+    headerFrame.size.height = height;
+    self.headerView.frame = headerFrame;
+    [self.tableView setTableHeaderView:self.headerView];
     
     [self refresh:nil withParams:nil];
     
@@ -165,13 +174,15 @@
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+- (CGFloat)tableView:(UITableView *)tableView xheightForHeaderInSection:(NSInteger)section {
     return 250;
 }
 
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView xviewForHeaderInSection:(NSInteger)section {
     ProfileHeaderCell *headerView = [tableView dequeueReusableCellWithIdentifier:@"ProfileHeaderCell"];
     headerView.user = self.user;
+    
+    
     
     return headerView;
 }

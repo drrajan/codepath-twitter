@@ -15,6 +15,7 @@
 #import "TweetDetailViewController.h"
 #import "ComposeViewController.h"
 #import "ProfileViewController.h"
+#import "AccountsViewController.h"
 
 @interface TweetsViewController () <UITableViewDataSource, UITableViewDelegate, ComposeViewControllerDelegate>
 
@@ -50,6 +51,8 @@
         self.title = @"Home";
     }
     self.navigationController.navigationBar.translucent = NO;
+    UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPress:)];
+    [self.navigationController.navigationBar addGestureRecognizer:longPressGestureRecognizer];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(onLogoutButton)];
     
@@ -276,6 +279,16 @@
 
 - (void)updateCellAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)onLongPress:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        self.navigationController.navigationBar.barTintColor = [UIColor redColor];
+    } else if (sender.state == UIGestureRecognizerStateEnded) {
+        NSLog(@"long press");
+        self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:85/255.0f green:172/255.0f blue:238/255.0f alpha:1];
+        [self.navigationController pushViewController:[AccountsViewController new] animated:YES];
+    }
 }
 
 

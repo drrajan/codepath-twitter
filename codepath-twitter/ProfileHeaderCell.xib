@@ -107,6 +107,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="containerView" destination="H2p-sc-9uM" id="MdF-D8-Jfm"/>
                 <outlet property="descriptionLabel" destination="Ifs-jh-vHd" id="ReP-Lc-OEJ"/>
                 <outlet property="followLabel" destination="ni3-Zl-QhJ" id="Epu-XG-Q4f"/>
                 <outlet property="followersLabel" destination="G74-az-b3S" id="jgX-3Y-Ixi"/>

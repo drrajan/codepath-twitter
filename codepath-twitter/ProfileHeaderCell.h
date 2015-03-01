@@ -12,5 +12,6 @@
 @interface ProfileHeaderCell : UITableViewCell
 
 @property (strong, nonatomic) User *user;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 
 @end
