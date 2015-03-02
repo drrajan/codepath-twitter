@@ -80,7 +80,7 @@
                             <constraint firstAttribute="height" constant="48" id="vds-ad-8du"/>
                         </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="999" verticalHuggingPriority="999" horizontalCompressionResistancePriority="999" verticalCompressionResistancePriority="999" translatesAutoresizingMaskIntoConstraints="NO" id="G4c-UC-n3L">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="999" verticalHuggingPriority="999" horizontalCompressionResistancePriority="999" verticalCompressionResistancePriority="999" translatesAutoresizingMaskIntoConstraints="NO" id="G4c-UC-n3L">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="320" id="So5-zQ-4gG"/>
