@@ -19,6 +19,8 @@
 
 @implementation AccountCell
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -35,6 +37,14 @@
     [self.profileImageView setImageWithURL:[NSURL URLWithString:user.profileImageUrl]];
     self.nameLabel.text = user.name;
     self.screenNameLabel.text = user.screenname;
+    
+    NSMutableString *bg = [NSMutableString stringWithFormat:@"0x%@", user.profileBackgroundColor];
+    NSLog(@"bg: %@", user.profileBackgroundColor);
+    unsigned colorInt = 0;
+    [[NSScanner scannerWithString:bg] scanHexInt:&colorInt];
+    
+    self.containerView.backgroundColor = UIColorFromRGB(colorInt);
+    self.contentView.backgroundColor = UIColorFromRGB(colorInt);
     
     self.profileImageView.layer.cornerRadius = 3;
     self.profileImageView.layer.borderColor = [[UIColor whiteColor] CGColor];

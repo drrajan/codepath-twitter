@@ -30,6 +30,7 @@ NSString * const UserDidSwitchNotification = @"UserDidSwitchNotification";
         self.screenname = [NSString stringWithFormat:@"@%@", dictionary[@"screen_name"]];
         self.profileImageUrl = dictionary[@"profile_image_url"];
         self.profileBannerUrl = [NSString stringWithFormat:@"%@/mobile_retina", dictionary[@"profile_banner_url"]];
+        self.profileBackgroundColor = dictionary[@"profile_background_color"];
         self.location = dictionary[@"location"];
         self.tagline = dictionary[@"description"];
         self.followersCount = [NSString stringWithFormat:@"%@", dictionary[@"followers_count"]];
@@ -64,6 +65,10 @@ NSString * const kAccountsKey = @"kAccountsKey";
 
 + (void)addAccount:(User *)user {
     NSMutableArray *array = [[[NSUserDefaults standardUserDefaults] arrayForKey:kAccountsKey] mutableCopy];
+    
+    if (array == nil) {
+        array = [NSMutableArray array];
+    }
     
     NSError *error;
     NSData *data = [NSJSONSerialization dataWithJSONObject:user.dictionary options:0 error:&error];

@@ -25,6 +25,8 @@
 
 @implementation ProfileHeaderCell
 
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 - (void)awakeFromNib {
     // Initialization code
 }
@@ -46,6 +48,13 @@
     self.tweetsLabel.text = user.tweetCount;
     self.followLabel.text = user.followingCount;
     self.followersLabel.text = user.followersCount;
+    
+    NSMutableString *bg = [NSMutableString stringWithFormat:@"0x%@", user.profileBackgroundColor];
+    NSLog(@"bg: %@", user.profileBackgroundColor);
+    unsigned colorInt = 0;
+    [[NSScanner scannerWithString:bg] scanHexInt:&colorInt];
+    
+    //self.contentView.backgroundColor = UIColorFromRGB(colorInt);
     
     self.descriptionLabel.preferredMaxLayoutWidth = self.descriptionLabel.bounds.size.width;
     [self.profileImageView setImageWithURL:[NSURL URLWithString:user.profileImageUrl]];

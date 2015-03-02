@@ -19,6 +19,7 @@ extern NSString * const UserDidSwitchNotification;
 @property (nonatomic, strong) NSString *screenname;
 @property (nonatomic, strong) NSString *profileImageUrl;
 @property (nonatomic, strong) NSString *profileBannerUrl;
+@property (nonatomic, strong) NSString *profileBackgroundColor;
 @property (nonatomic, strong) NSString *tagline;
 @property (nonatomic, strong) NSString *location;
 @property (nonatomic, strong) NSString *followersCount;
